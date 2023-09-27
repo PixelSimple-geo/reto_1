@@ -8,90 +8,13 @@
     --step-3: clamp(1.94rem, 1.08rem + 4.34vw, 4.44rem);
     --step-4: clamp(2.33rem, 1.08rem + 6.24vw, 5.92rem);
     --step-5: clamp(2.80rem, 1.03rem + 8.86vw, 7.89rem);
-
 }
 
-/*Tren*/
-.train {
-    width: 2.5rem;
-    aspect-ratio: 1/1;
-    background-color: red;
-    position: absolute;
-    top: 19%;
-    right: 50%;
-}
-
-/*Linea de paradas*/
-.line {
-    width: min(20rem, 90%);
-    height: 1px;
-    background-color: black;
-    position: absolute;
-    top: 25%;
-    right: 44%;
-}
-
-.line > div {
-    width: 1px;
-    height: 10px;
-    background-color: black;
-}
-
-.line div:nth-child(1) {
-    position: absolute;
-    left: 20%;
-    top: 50%;
-    transform: translateY(-50%);
-}
-.line div:nth-child(2) {
-    position: absolute;
-    left: 40%;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.line div:nth-child(3) {
-    position: absolute;
-    left: 60%;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.line div:nth-child(4) {
-    position: absolute;
-    left: 80%;
-    top: 50%;
-    transform: translateY(-50%);
-}
-.line div:nth-child(5) {
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-/*Boton de manual/automatico*/
-.container-toggle {
-    width: 10rem;
-    height: 3rem;
-    background-color: lightseagreen;
-    position: relative;
-}
-
-.container-toggle > button {
-    position: absolute;
-    left:0;
-}
-
-/* Estilos generales para centrar la página */
+/*Body*/
 body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #7aef7a;
+    display: grid;
+    min-height: 100vh;
+    grid-template-rows: auto 1fr auto;
 }
 
 /*Header*/
@@ -99,8 +22,6 @@ header{
     display: flex;
     width: 100%;
     background-color: rgb(128, 128, 128);
-    position: absolute;
-    top: 0;
 }
 
 header p{
@@ -110,9 +31,11 @@ header p{
     display: flex;
     align-items: center;
     color: #fff;
+    font-size: var(--step-1);
 
 }
 
+/*Navegador*/
 nav{
     background-color: #2245c7;
     text-align: center;
@@ -121,49 +44,215 @@ nav{
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    padding-right: 3em;
 }
 
-nav  p {
+nav  a {
     color: #fff;
     text-decoration: none;
     margin: 0.6em;
+    font-size: var(--step-0);
 }
 
-/* Estilos para los botones */
-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
+/*Main*/
+main{
+    background-color: gold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+
+.train-wrapper {
+    position: relative;
+    background-color: brown;
+    width: 100%;
+}
+
+/*Tren*/
+#train {
+    width: 8em;
+    height: 5em;
+    position: absolute;
+    left: 0;
+    transform: translateY(-28%);
+}
+
+/*Linea de paradas*/
+.line {
+    width: min(75rem, 90%);
+    height: 0.2em;
+    background-color: black;
+    position: absolute;
+    top: 50%;
+    right: 20%;
+}
+
+.line > div {
+    width: 0.2em;
+    height: 2em;
+    background-color: black;
+}
+
+.line div:nth-child(1) {
+    position: absolute;
+    left: 20%;
+    top: -400%;
+    transform: translateY(-50%);
+}
+.line div:nth-child(2) {
+    position: absolute;
+    left: 40%;
+    top: -400%;
+    transform: translateY(-50%);
+}
+
+.line div:nth-child(3) {
+    position: absolute;
+    left: 60%;
+    top: -400%;
+    transform: translateY(-50%);
+}
+
+.line div:nth-child(4) {
+    position: absolute;
+    left: 80%;
+    top: -400%;
+    transform: translateY(-50%);
+}
+.line div:nth-child(5) {
+    position: absolute;
+    left: 100%;
+    top: -400%;
+    transform: translateY(-50%);
+}
+
+/*Controles*/
+.controllers{
+    border: black 0.3em solid;
+    padding: 3em;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5em;
+}
+
+.container-toggle{
+    padding: 2em;
+    text-align: center;
+}
+
+.botones-container{
+    display: flex;
+    padding: 2em;
+}
+
+.botones-container p{
+    font-size: var(--step--2);
+}
+.botones-container button{
+    margin: 1.5em;
+    border-radius: 3px;
+    box-shadow: 0.1em 0.1em 1em 0.1em black;
+    padding: 5px 10px;
+    background-color: #2245c7;
+    color: #fff;
     border: none;
-    border-radius: 5px;
+}
+
+.b4{
+    margin: 1.5em;
+    border-radius: 3px;
+    box-shadow: 0.1em 0.1em 1em 0.1em black;
+    padding: 5px 10px;
+    background-color: #2245c7;
+    color: #fff;
+    border: none;
+}
+.botones-container p{
+    margin: 1.5em;
+}
+
+/*Boton de manual/automatico*/
+.manaut{
+    display: inline;
+    margin: 1em;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    vertical-align: middle
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.desliz {
+    position: absolute;
     cursor: pointer;
-    margin: 5px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ff0000;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
-/* Estilos específicos para los botones en la sección de control */
-.controllers button {
-    margin-bottom: 10px;
+.desliz:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: #000000;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
-/* Alinear los botones de izquierda a derecha */
-.controllers button:nth-child(1) {
-    order: 1;
+input:checked+.desliz {
+    background-color: #0046ff;
 }
 
-.controllers button:nth-child(2) {
-    order: 2;
+input:focus+.desliz {
+    box-shadow: 0.1em 0.1em 1em 0.1em #007bff;
 }
 
-.controllers button:nth-child(3) {
-    order: 3;
-}
-
-.controllers button:nth-child(4) {
-    order: 4;
+input:checked+.desliz:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
 }
 
 
+/* Rounded sliders */
+.desliz.redondo {
+    border-radius: 34px;
+}
 
+.desliz.redondo:before {
+    border-radius: 50%;
+}
+
+
+/*Footer*/
+footer{
+    background-color: blueviolet;
+    padding: 1em;
+    color: #fff;
+}
+
+footer p{
+    margin-left: 1em;
+
+}
 
 
 
