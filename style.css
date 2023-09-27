@@ -1,0 +1,82 @@
+/*Root, tamaño fuente responsivo*/
+:root {
+    --step--2: clamp(0.78rem, 0.69rem + 0.48vw, 1.06rem);
+    --step--1: clamp(0.94rem, 0.77rem + 0.82vw, 1.41rem);
+    --step-0: clamp(1.13rem, 0.86rem + 1.30vw, 1.88rem);
+    --step-1: clamp(1.35rem, 0.95rem + 2.00vw, 2.50rem);
+    --step-2: clamp(1.62rem, 1.02rem + 2.98vw, 3.33rem);
+    --step-3: clamp(1.94rem, 1.08rem + 4.34vw, 4.44rem);
+    --step-4: clamp(2.33rem, 1.08rem + 6.24vw, 5.92rem);
+    --step-5: clamp(2.80rem, 1.03rem + 8.86vw, 7.89rem);
+
+}
+
+
+.train {
+    width: 2.5rem;
+    aspect-ratio: 1/1;
+    background-color: red;
+}
+
+.line {
+    position: relative;
+    width: min(20rem, 90%);
+    height: 1px;
+    background-color: black;
+}
+
+.line > div {
+    width: 1px;
+    height: 10px;
+    background-color: black;
+}
+
+.line div:nth-child(1) {
+    position: absolute;
+    left: 20%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.line div:nth-child(2) {
+    position: absolute;
+    left: 40%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.line div:nth-child(3) {
+    position: absolute;
+    left: 60%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.line div:nth-child(4) {
+    position: absolute;
+    left: 80%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.line div:nth-child(5) {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+.container-toggle {
+    width: 10rem;
+    height: 5rem;
+    background-color: lightseagreen;
+    position: relative;
+}
+
+.container-toggle > button {
+    position: absolute;
+    left:0;
+}
+
+
+
+
