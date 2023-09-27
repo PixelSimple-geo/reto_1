@@ -11,18 +11,24 @@
 
 }
 
-
+/*Tren*/
 .train {
     width: 2.5rem;
     aspect-ratio: 1/1;
     background-color: red;
+    position: absolute;
+    top: 19%;
+    right: 50%;
 }
 
+/*Linea de paradas*/
 .line {
-    position: relative;
     width: min(20rem, 90%);
     height: 1px;
     background-color: black;
+    position: absolute;
+    top: 25%;
+    right: 44%;
 }
 
 .line > div {
@@ -64,10 +70,10 @@
     transform: translateY(-50%);
 }
 
-
+/*Boton de manual/automatico*/
 .container-toggle {
     width: 10rem;
-    height: 5rem;
+    height: 3rem;
     background-color: lightseagreen;
     position: relative;
 }
@@ -76,6 +82,87 @@
     position: absolute;
     left:0;
 }
+
+/* Estilos generales para centrar la página */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #7aef7a;
+}
+
+/*Header*/
+header{
+    display: flex;
+    width: 100%;
+    background-color: rgb(128, 128, 128);
+    position: absolute;
+    top: 0;
+}
+
+header p{
+    background-color: #2245c7;
+    padding: 1em 1em;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    color: #fff;
+
+}
+
+nav{
+    background-color: #2245c7;
+    text-align: center;
+    padding: 10px 0;
+    width: 40%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+nav  p {
+    color: #fff;
+    text-decoration: none;
+    margin: 0.6em;
+}
+
+/* Estilos para los botones */
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+/* Estilos específicos para los botones en la sección de control */
+.controllers button {
+    margin-bottom: 10px;
+}
+
+/* Alinear los botones de izquierda a derecha */
+.controllers button:nth-child(1) {
+    order: 1;
+}
+
+.controllers button:nth-child(2) {
+    order: 2;
+}
+
+.controllers button:nth-child(3) {
+    order: 3;
+}
+
+.controllers button:nth-child(4) {
+    order: 4;
+}
+
+
 
 
 
