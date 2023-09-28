@@ -8,169 +8,137 @@
     --step-3: clamp(1.94rem, 1.08rem + 4.34vw, 4.44rem);
     --step-4: clamp(2.33rem, 1.08rem + 6.24vw, 5.92rem);
     --step-5: clamp(2.80rem, 1.03rem + 8.86vw, 7.89rem);
+
+    --bgColor: white;
+    --borderColor: #d2d3d7;
 }
 
-/*Body*/
+html {
+    font-family: sans-serif;
+}
+
 body {
     display: grid;
-    min-height: 100vh;
     grid-template-rows: auto 1fr auto;
 }
 
-/*Header*/
-header{
+/* Cabecera */
+header {
+    width: 80%;
+    margin: 0 auto;
     display: flex;
-    width: 100%;
-    background-color: rgb(128, 128, 128);
-}
-
-header p{
-    background-color: #2245c7;
-    padding: 1em 1em;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    color: #fff;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background-color: var(--bgColor);
+    padding: 1em;
     font-size: var(--step-1);
-
+    border-bottom: 1px solid var(--borderColor);
 }
 
-/*Navegador*/
-nav{
-    background-color: #2245c7;
-    text-align: center;
-    padding: 10px 0;
-    width: 40%;
+nav ul {
+    width: 100%;
     display: flex;
-    justify-content: flex-end;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
-    padding-right: 3em;
 }
 
-nav  a {
-    color: #fff;
-    text-decoration: none;
-    margin: 0.6em;
-    font-size: var(--step-0);
+nav ul a {
+    padding: 1em;
 }
 
 /*Main*/
-main{
-    background-color: gold;
+main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 8rem;
 }
 
-
 .train-wrapper {
+    padding: 2rem;
     position: relative;
-    background-color: brown;
-    width: 100%;
+    width: 80%;
+    margin: 0 auto;
 }
 
 /*Tren*/
+.line {
+    width: 100%;
+    height: 0.2em;
+    background-color: black;
+    position: absolute;
+    top: 50%;
+    left: 0;
+}
+
 #train {
-    width: 8em;
-    height: 5em;
+    width: 100px;
+    aspect-ratio: 1;
     position: absolute;
     left: 0;
     transform: translateY(-28%);
 }
 
 /*Linea de paradas*/
-.line {
-    width: min(75rem, 90%);
-    height: 0.2em;
-    background-color: black;
-    position: absolute;
-    top: 50%;
-    right: 20%;
-}
-
 .line > div {
     width: 0.2em;
     height: 2em;
     background-color: black;
 }
 
-.line div:nth-child(1) {
+.line div {
     position: absolute;
-    left: 20%;
     top: -400%;
     transform: translateY(-50%);
 }
+
+.line div:nth-child(1) {
+    left: 20%;
+}
 .line div:nth-child(2) {
-    position: absolute;
     left: 40%;
-    top: -400%;
-    transform: translateY(-50%);
 }
 
 .line div:nth-child(3) {
-    position: absolute;
     left: 60%;
-    top: -400%;
-    transform: translateY(-50%);
 }
 
 .line div:nth-child(4) {
-    position: absolute;
     left: 80%;
-    top: -400%;
-    transform: translateY(-50%);
 }
+
 .line div:nth-child(5) {
-    position: absolute;
     left: 100%;
-    top: -400%;
-    transform: translateY(-50%);
 }
 
 /*Controles*/
-.controllers{
-    border: black 0.3em solid;
-    padding: 3em;
+.controllers {
+    border: 1px solid var(--borderColor);
+    padding: 2em;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
     flex-direction: column;
-    border-radius: 5em;
+    border-radius: 10px;
 }
 
-.container-toggle{
-    padding: 2em;
-    text-align: center;
-}
-
-.botones-container{
+.botones-container {
     display: flex;
-    padding: 2em;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
-.botones-container p{
-    font-size: var(--step--2);
-}
-.botones-container button{
-    margin: 1.5em;
+.controllers button {
     border-radius: 3px;
-    box-shadow: 0.1em 0.1em 1em 0.1em black;
-    padding: 5px 10px;
-    background-color: #2245c7;
-    color: #fff;
-    border: none;
-}
-
-.b4{
-    margin: 1.5em;
-    border-radius: 3px;
-    box-shadow: 0.1em 0.1em 1em 0.1em black;
-    padding: 5px 10px;
-    background-color: #2245c7;
-    color: #fff;
-    border: none;
-}
-.botones-container p{
-    margin: 1.5em;
+    padding: 1.5em 2em;
+    border: 1px solid var(--borderColor);
+    background-color: inherit;
+    cursor: pointer;
 }
 
 /*Boton de manual/automatico*/
@@ -243,16 +211,11 @@ input:checked+.desliz:before {
 
 
 /*Footer*/
+
 footer{
-    background-color: blueviolet;
     padding: 1em;
-    color: #fff;
 }
 
-footer p{
-    margin-left: 1em;
-
-}
 
 
 
