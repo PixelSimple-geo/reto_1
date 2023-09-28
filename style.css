@@ -80,7 +80,7 @@ main {
     position: absolute;
     left: 20%;
     transform: translate(-50%, -28%);
-    animation-duration: 5s;
+    animation-duration: 10s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
     animation-fill-mode: both;
@@ -129,6 +129,8 @@ main {
     gap: 1rem;
     flex-direction: column;
     border-radius: 10px;
+    height: 300px;
+    overflow: hidden;
 }
 
 .botones-container {
@@ -148,7 +150,13 @@ main {
 }
 
 .destino-wrapper {
-    display: none;
+    height: 100%;
+    visibility: hidden;
+}
+
+.terminarCiclo {
+    height: 100%;
+    visibility: visible;
 }
 
 #destino {

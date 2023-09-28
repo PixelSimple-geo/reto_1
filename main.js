@@ -19,27 +19,29 @@ let p5;
 
 /*Start*/
 trainMode.addEventListener("click", () => {
-   if (trainMode.checked) {
-       terminarCiclo.style.display = "block";
-       destinoWrapper.style.display = "none";
-
-   } else {
-       terminarCiclo.style.display = "none";
-       destinoWrapper.style.display = "block";
-       train.style.animationName = "none";
-   }
+    if (trainMode.checked) {
+        terminarCiclo.style.visibility = "visible";
+        destinoWrapper.style.visibility = "hidden";
+    } else {
+        terminarCiclo.style.visibility = "hidden";
+        destinoWrapper.style.visibility = "visible";
+        train.style.animationName = "none";
+    }
 });
 
 start.addEventListener("click", () => {
-    train.style.animationName = "train-animation";
+    if (trainMode.checked){
+        train.style.animationName = "train-animation";
+
+    }else {
+        /*Animacion de momdo manual*/
+    }
 })
 
 /*Stop*/
-function stopTrain() {
+stop.addEventListener("click", () => {
     train.style.animation = "none";
 
     const trainPosition = getComputedStyle(train).left;
     train.style.left = trainPosition;
-}
-
-stop.addEventListener("click", stopTrain);
+})
