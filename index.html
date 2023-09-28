@@ -10,6 +10,8 @@
     <link type="text/css" rel="stylesheet" href="reset.css">
     <link type="text/css" rel="stylesheet" href="style.css">
 
+    <script type="text/javascript" src="main.js" defer></script>
+
 </head>
 <body>
 <header>
@@ -37,7 +39,7 @@
         <div class="container-toggle">
             <p class="manaut">Manual</p>
             <label class="switch">
-                <input type="checkbox" id="company-survey-checker">
+                <input id="trainMode" type="checkbox" checked>
                     <span class="desliz redondo"></span>
             </label>
             <p class="manaut">Automatico</p>
@@ -48,17 +50,17 @@
             <p>Ubicación actual: <span>Arriaga</span></p>
             <button type="button">Stop</button>
         </div>
-<div>
-        <label for="destino">Destino</label>
-        <select id="destino">
-            <option>1 Ibaiondo</option>
-            <option>2 Wellington</option>
-            <option>3 Txagorritxu</option>
-            <option>4 Europa</option>
-            <option>5 Lvaina</option>
-        </select>
-</div>
-        <button type="button" class="b4">Terminar Ciclo</button>
+        <div class="destino-wrapper">
+            <label for="destino">Destino</label>
+            <select id="destino">
+                <option>1 Ibaiondo</option>
+                <option>2 Wellington</option>
+                <option>3 Txagorritxu</option>
+                <option>4 Europa</option>
+                <option>5 Lvaina</option>
+            </select>
+        </div>
+        <button type="button" class="terminarCiclo">Terminar Ciclo</button>
     </div>
 </main>
 <footer>
