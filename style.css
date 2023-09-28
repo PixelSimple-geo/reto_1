@@ -186,11 +186,7 @@ main {
 }
 
 input:checked+.desliz {
-    background-color: #0046ff;
-}
-
-input:focus+.desliz {
-    box-shadow: 0.1em 0.1em 1em 0.1em #007bff;
+    background-color: #00ff22;
 }
 
 input:checked+.desliz:before {
@@ -224,5 +220,22 @@ footer ul {
 }
 
 
+.manualDeUso {
+    display: block;
+    max-width: 800px;
+    margin: 5em auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    text-align: justify;
+}
 
+.manualDeUso ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.manualDeUso p {
+    margin: 5em 0;
+}
 
