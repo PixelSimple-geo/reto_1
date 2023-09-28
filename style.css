@@ -214,6 +214,13 @@ input:checked+.desliz:before {
 
 footer{
     padding: 1em;
+    display: flex;
+    justify-content: space-between;
+}
+
+footer ul {
+    display: flex;
+    gap: 1rem;
 }
 
 
