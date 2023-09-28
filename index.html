@@ -15,30 +15,44 @@
 <header>
     <p>EuskoTren</p>
     <nav>
-        <p>Tranvía</p>
-        <p>Manúal</p>
-        <p>Contacto</p>
+        <a href="#">Tranvía</a>
+        <a href="#">Manúal</a>
+        <a href="#">Contacto</a>
     </nav>
 </header>
 <main>
-    <div class="train"></div>
-    <div class="line">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+    <div class="train-wrapper">
+        <div class="line">
+
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <img src="media/tram.png" id="train" class="train">
+        </div>
     </div>
     <div class="controllers">
         <div class="container-toggle">
-        <button>Manual</button>
+            <p class="manaut">Manual</p>
+            <label class="switch">
+                <input type="checkbox" id="company-survey-checker">
+                    <span class="desliz redondo"></span>
+            </label>
+            <p class="manaut">Automatico</p>
         </div>
-        <button type="button" id="start">Start</button>
-        <p>Ubicación actual: <span>Arriaga</span></p>
-        <button type="button">Stop</button>
-        <button type="button">Terminar Ciclo</button>
+        <div class="botones-container">
+            <button type="button" id="start">Start</button>
+            <p>Ubicación actual: <span>Arriaga</span></p>
+            <button type="button">Stop</button>
+        </div>
+
+        <button type="button" class="b4">Terminar Ciclo</button>
     </div>
 </main>
+<footer>
+    <p>Copyright &copy; 2023 Grupo PixelSimple.geo & Automatización | Todos los derechos reservados </p>
+</footer>
 
 </body>
 </html>
