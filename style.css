@@ -115,6 +115,7 @@ main {
 
 /*Controles*/
 .controllers {
+    width: min(35rem, 80%);
     border: 1px solid var(--borderColor);
     padding: 2em;
     display: flex;
@@ -139,6 +140,14 @@ main {
     border: 1px solid var(--borderColor);
     background-color: inherit;
     cursor: pointer;
+}
+
+.destino-wrapper {
+    display: none;
+}
+
+#destino {
+    padding: 0.5em;
 }
 
 /*Boton de manual/automatico*/
@@ -189,13 +198,7 @@ input:checked+.desliz {
     background-color: #0046ff;
 }
 
-input:focus+.desliz {
-    box-shadow: 0.1em 0.1em 1em 0.1em #007bff;
-}
-
 input:checked+.desliz:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
     transform: translateX(26px);
 }
 
@@ -220,6 +223,7 @@ footer{
 
 footer ul {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
 }
 

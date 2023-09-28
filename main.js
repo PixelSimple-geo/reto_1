@@ -1,20 +1,15 @@
-const url = "url a nuestro plc";
+const trainMode = document.querySelector("#trainMode");
+const destinoWrapper = document.querySelector(".destino-wrapper");
+const terminarCiclo = document.querySelector(".terminarCiclo");
 
-const startButton = document.getElementById("start");
-let isOn = false;
-
-startButton.addEventListener("click", () => {
-    fetch(url)
-        .then(response => {
-            if (response.ok)
-                return response.json()
-            else
-                throw new Error("No se ha podido hacer fetch["+url+"].")
-        })
-        .then(data => {
-            isOn = data;
-        })
-        .catch(error => {
-            console.error("fetch error["+url+"]: " + error)
-        });
+trainMode.addEventListener("click", () => {
+   if (trainMode.checked) {
+       terminarCiclo.style.display = "block";
+       destinoWrapper.style.display = "none";
+   } else {
+       terminarCiclo.style.display = "none";
+       destinoWrapper.style.display = "block";
+   }
 });
+
+
