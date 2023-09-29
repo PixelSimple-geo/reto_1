@@ -45,5 +45,3 @@ stop.addEventListener("click", () => {
     const trainPosition = getComputedStyle(train).left;
     train.style.left = trainPosition;
 })
-
-
