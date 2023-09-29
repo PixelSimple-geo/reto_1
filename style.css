@@ -11,6 +11,9 @@
 
     --bgColor: white;
     --borderColor: #d2d3d7;
+
+    --train-start: 0%;
+    --train-end: 100%;
 }
 
 html {
@@ -80,10 +83,6 @@ main {
     position: absolute;
     left: 20%;
     transform: translate(-50%, -28%);
-    animation-duration: 10s;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-    animation-fill-mode: both;
 }
 
 /*Linea de paradas*/
@@ -264,23 +263,94 @@ footer ul {
 
 /* train animation */
 
-@keyframes train-animation {
-    20% {
+@keyframes st1 {
+    0% {
         left: 20%;
     }
 
-    40% {
+    100% {
+        left: 40%
+    }
+}
+
+@keyframes st2 {
+    0% {
         left: 40%;
     }
 
-    60% {
+    100% {
+        left: 60%;
+    }
+}
+
+@keyframes st3 {
+    0% {
         left: 60%;
     }
 
-    80% {
+    100% {
         left: 80%;
     }
+}
+
+@keyframes st4 {
+    0% {
+        left: 80%;
+    }
+
     100% {
         left: 100%;
+    }
+}
+
+@keyframes st1r {
+    0% {
+        left: 100%;
+    }
+
+    100% {
+        left: 80%
+    }
+}
+
+@keyframes st2r {
+    0% {
+        left: 80%;
+    }
+
+    100% {
+        left: 60%;
+    }
+}
+
+@keyframes st3r {
+    0% {
+        left: 60%;
+    }
+
+    100% {
+        left: 40%;
+    }
+}
+
+@keyframes st4r {
+    0% {
+        left: 40%;
+    }
+
+    100% {
+        left: 20%;
+    }
+}
+
+@keyframes reset {
+    100% {
+        left: 0;
+    }
+}
+
+@keyframes manual {
+    100% {
+        left: var(--train-end);
     }
 }
