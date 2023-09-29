@@ -242,6 +242,11 @@ footer ul {
     gap: 1rem;
 }
 
+/*Manual y Stats*/
+.manGraph{
+    display: grid;
+    grid-template-columns: auto auto;
+}
 
 .manualDeUso {
     display: block;
@@ -260,6 +265,21 @@ footer ul {
 
 .manualDeUso p {
     margin: 5em 0;
+}
+
+.grafico{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 5em auto;
+    padding: 20px;
+    width: 800px;
+    height: 700px;
+}
+
+.grafico label{
+    font-size: var(--step-2);
 }
 
 /* train animation */
