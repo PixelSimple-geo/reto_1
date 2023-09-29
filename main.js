@@ -47,8 +47,8 @@ start.addEventListener("click", () => {
         playNextAnimation(animations, currentIndex);
     } else {
         let selectedIndex = selectElement.selectedIndex;
-        root.style.setProperty('--train-end', positions[selectedIndex]);
-        train.style.animation = "0.5s linear 0s 1 forwards manual";
+        document.documentElement.style.setProperty('--train-end', positions[selectedIndex]);
+        train.style.animation = "0.5s linear 2s 1 both manual";
     }
 });
 
