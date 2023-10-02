@@ -183,12 +183,10 @@ main {
 
 .destino-wrapper {
     height: 100%;
-    visibility: hidden;
 }
 
 .terminarCiclo {
     height: 100%;
-    visibility: visible;
 }
 
 #destino {

@@ -6,6 +6,9 @@ const train = document.querySelector("#train");
 const start = document.querySelector("#start");
 const stop = document.querySelector("#stop");
 const finishCycle = document.querySelector(".terminarCiclo");
+const destino = document.getElementById("destino");
+        destino.disabled = true;
+
 // start
 let pm;
 let pausa;
@@ -25,14 +28,14 @@ let trainEnd = 100;
 /*Start*/
 trainMode.addEventListener("click", () => {
     if (trainMode.checked) {
-        terminarCiclo.style.visibility = "visible";
-        destinoWrapper.style.visibility = "hidden";
+        terminarCiclo.disabled = false;
+        destino.disabled = true;
         setTimeout(() => {
             start.disabled = false;
         }, 3000);
     } else {
-        terminarCiclo.style.visibility = "hidden";
-        destinoWrapper.style.visibility = "visible";
+        terminarCiclo.disabled = true;
+        destino.disabled = false;
         train.style.animationName = "none";
         setTimeout(() => {
             start.disabled = false;
