@@ -11,8 +11,6 @@ let currentPosition = 0;
 let animationInterval;
 let terminateCycle = false;
 
-
-
 // start
 let pm;
 let pausa;
@@ -62,7 +60,16 @@ stopButton.addEventListener("click", () => {
 finishCycle.addEventListener("click", () => {
     terminateCycle = true;
     start.disabled = false;
+    if (currentPosition == 1){
+
+    }
+    setTimeout(() => {
+        train.style.left = "0%";
+        currentPosition = 0;
+        train.style.transition = "all 2000ms";
+    }, 3000);
 });
+
 
 function playNextAnimation(array, index) {
     if (!terminateCycle || index !== 0) {
