@@ -42,6 +42,7 @@ const selectElement = document.getElementById("destino");
 
 
 start.addEventListener("click", () => {
+    start.disabled = true;
     animationTerminate = false;
     if (trainMode.checked) {
         playNextAnimation(animations, currentIndex);
@@ -51,8 +52,6 @@ start.addEventListener("click", () => {
         train.style.animation = "0.5s linear 2s 1 both manual";
     }
 });
-
-
 
 /*Stop*/
 stop.addEventListener("click", () => {
@@ -65,10 +64,10 @@ stop.addEventListener("click", () => {
 
 finishCycle.addEventListener("click", () => {
     animationTerminate = true;
+        start.disabled = false;
 });
 
 function playNextAnimation(array, index) {
-    console.log(animations[index]);
     train.style.animation = "0.5s linear 0.25s 1 both " + array[index];
     train.addEventListener("animationend", onAnimationEndOnce);
 }
