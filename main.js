@@ -27,10 +27,16 @@ trainMode.addEventListener("click", () => {
     if (trainMode.checked) {
         terminarCiclo.style.visibility = "visible";
         destinoWrapper.style.visibility = "hidden";
+        setTimeout(() => {
+            start.disabled = false;
+        }, 3000);
     } else {
         terminarCiclo.style.visibility = "hidden";
         destinoWrapper.style.visibility = "visible";
         train.style.animationName = "none";
+        setTimeout(() => {
+            start.disabled = false;
+        }, 3000);
     }
 });
 
