@@ -47,8 +47,6 @@ start.addEventListener("click", () => {
         const selectedIndex = selectElement.selectedIndex;
         train.style.left = positions[selectedIndex];
     }
-
-
 });
 
 stopButton.addEventListener("click", () => {
