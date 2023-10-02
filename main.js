@@ -1,13 +1,15 @@
-const root = document.documentElement;
-const trainMode = document.querySelector("#trainMode");
-const destinoWrapper = document.querySelector(".destino-wrapper");
-const terminarCiclo = document.querySelector(".terminarCiclo");
-const train = document.querySelector("#train");
+"use strict";
 const start = document.querySelector("#start");
-const stop = document.querySelector("#stop");
+const stopButton = document.querySelector("#stop");
+const train = document.querySelector(".train");
 const finishCycle = document.querySelector(".terminarCiclo");
-const destino = document.getElementById("destino");
-        destino.disabled = true;
+const mode = document.querySelector("#trainMode");
+
+let positions = ["20%", "40%", "60%", "80%", "100%",];
+const cycle = ["20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "20%"];
+let currentPosition = 0;
+let animationInterval;
+let terminateCycle = false;
 
 // start
 let pm;
@@ -22,73 +24,48 @@ let p3;
 let p4;
 let p5;
 
-let trainStart = 20;
-let trainEnd = 100;
-
-/*Start*/
-trainMode.addEventListener("click", () => {
-    if (trainMode.checked) {
-        terminarCiclo.disabled = false;
-        destino.disabled = true;
-        setTimeout(() => {
-            start.disabled = false;
-        }, 3000);
-    } else {
-        terminarCiclo.disabled = true;
-        destino.disabled = false;
-        train.style.animationName = "none";
-        setTimeout(() => {
-            start.disabled = false;
-        }, 3000);
-    }
-});
-
-let animations = ["st1", "st2", "st3", "st4", "st1r", "st2r", "st3r", "st4r"];
-let positions = ["20%", "40%", "60%", "80%", "100%"];
-let currentIndex = 0;
-let animationTerminate = false;
-const selectElement = document.getElementById("destino");
-
-
 start.addEventListener("click", () => {
-    start.disabled = true;
-    animationTerminate = false;
-    if (trainMode.checked) {
-        playNextAnimation(animations, currentIndex);
+    if (mode.checked) {
+        start.disabled = true;
+        finishCycle.disabled = false;
+        animationInterval = setInterval(() => {
+            train.style.transition = "all 350ms";
+            playNextAnimation(cycle, currentPosition);
+            currentPosition++;
+            if (currentPosition >= cycle.length) {
+                currentPosition = 0;
+            }
+            if (terminateCycle && currentPosition === 0) {
+                clearInterval(animationInterval);
+                train.style.left = cycle[currentPosition];
+                train.style.transition = "all 350ms";
+                terminateCycle = false;
+            }
+        }, 350);
     } else {
-        let selectedIndex = selectElement.selectedIndex;
-        document.documentElement.style.setProperty('--train-end', positions[selectedIndex]);
-        train.style.animation = "0.5s linear 2s 1 both manual";
+        const selectElement = document.querySelector('select');
+        const selectedIndex = selectElement.selectedIndex;
+        train.style.left = positions[selectedIndex];
     }
+
+
 });
 
-/*Stop*/
-stop.addEventListener("click", () => {
-    const computedStyle = window.getComputedStyle(train).getPropertyValue("left");
-    train.removeEventListener("animationend", onAnimationEndOnce);
-    train.style.animation = "2s linear 1s 1 both reset";
-    currentIndex = 0;
-    train.style.left = computedStyle;
-    setTimeout(() => {
-        start.disabled = false;
-    }, 4000);})
+stopButton.addEventListener("click", () => {
+    clearInterval(animationInterval);
+    currentPosition = 0;
+    start.disabled = false;
+    train.style.left = "0%";
+    train.style.transition = "all 2000ms";
+});
 
 finishCycle.addEventListener("click", () => {
-    animationTerminate = true;
-    setTimeout(() => {
-        start.disabled = false;
-    }, 1000);});
+    terminateCycle = true;
+    start.disabled = false;
+});
 
 function playNextAnimation(array, index) {
-    train.style.animation = "0.5s linear 0.25s 1 both " + array[index];
-    train.addEventListener("animationend", onAnimationEndOnce);
-}
-
-function onAnimationEndOnce() {
-    currentIndex++
-    if (currentIndex >= animations.length)
-        currentIndex = 0;
-    if (!(animationTerminate && currentIndex == 0)) {
-        playNextAnimation(animations, currentIndex);
+    if (!terminateCycle || index !== 0) {
+        train.style.left = array[index];
     }
 }
