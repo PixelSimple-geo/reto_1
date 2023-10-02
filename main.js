@@ -11,6 +11,8 @@ let currentPosition = 0;
 let animationInterval;
 let terminateCycle = false;
 
+
+
 // start
 let pm;
 let pausa;
@@ -67,3 +69,17 @@ function playNextAnimation(array, index) {
         train.style.left = array[index];
     }
 }
+
+/*Deshabilitar destino o ciclo*/
+const destino = document.getElementById("destino")
+destino.disabled = true;
+
+mode.addEventListener("change", () => {
+    if (mode.checked) {
+        destino.disabled = true;
+        finishCycle.disabled = false;
+    } else {
+        destino.disabled = false;
+        finishCycle.disabled = true;
+    }
+});
