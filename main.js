@@ -60,12 +60,15 @@ stop.addEventListener("click", () => {
     train.style.animation = "2s linear 1s 1 both reset";
     currentIndex = 0;
     train.style.left = computedStyle;
-})
+    setTimeout(() => {
+        start.disabled = false;
+    }, 4000);})
 
 finishCycle.addEventListener("click", () => {
     animationTerminate = true;
+    setTimeout(() => {
         start.disabled = false;
-});
+    }, 1000);});
 
 function playNextAnimation(array, index) {
     train.style.animation = "0.5s linear 0.25s 1 both " + array[index];
