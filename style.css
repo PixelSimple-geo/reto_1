@@ -425,7 +425,10 @@ footer ul {
     }
 
     .controllers{
-        height: 100%;
+        height: 50%;
+    }
+    .destino-wrapper{
+        height: 25%;
     }
 
     /*Ventana manual y stats*/

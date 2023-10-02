@@ -59,6 +59,7 @@ start.addEventListener("click", () => {
         let selectedIndex = selectElement.selectedIndex;
         document.documentElement.style.setProperty('--train-end', positions[selectedIndex]);
         train.style.animation = "0.5s linear 2s 1 both manual";
+        start.disabled = false;
     }
 });
 
