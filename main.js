@@ -48,7 +48,7 @@ start.addEventListener("click", () => {
     } else {
         const selectElement = document.querySelector('select');
         const selectedIndex = selectElement.selectedIndex;
-        train.style.transition = "all 500ms";
+        train.style.transition = "all 1000ms";
         train.style.left = positions[selectedIndex];
     }
 });
