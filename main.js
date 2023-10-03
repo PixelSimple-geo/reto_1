@@ -1,6 +1,7 @@
 "use strict";
 const start = document.querySelector("#start");
 const stopButton = document.querySelector("#stop");
+const reset = document.querySelector("#reset");
 const train = document.querySelector(".train");
 const finishCycle = document.querySelector(".terminarCiclo");
 const mode = document.querySelector("#trainMode");
@@ -25,6 +26,7 @@ let p4;
 let p5;
 
 start.addEventListener("click", () => {
+    reset.disabled = true;
     if (mode.checked) {
         start.disabled = true;
         finishCycle.disabled = false;
@@ -49,12 +51,22 @@ start.addEventListener("click", () => {
     }
 });
 
-stopButton.addEventListener("click", () => {
+reset.disabled = true;
+reset.addEventListener("click", () =>{
     clearInterval(animationInterval);
     currentPosition = 0;
     start.disabled = false;
     train.style.left = "0%";
     train.style.transition = "all 2000ms";
+    reset.disabled = true;
+    finishCycle.disabled = false;
+});
+
+stopButton.addEventListener("click", () => {
+    clearInterval(animationInterval);
+    start.disabled = false;
+    reset.disabled = false;
+    finishCycle.disabled = true;
 });
 
 finishCycle.addEventListener("click", () => {
