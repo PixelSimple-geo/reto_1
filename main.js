@@ -98,3 +98,47 @@ mode.addEventListener("change", () => {
         finishCycle.disabled = true;
     }
 });
+
+/**/
+// Obtén referencias a los botones de parada
+const parada1 = document.querySelector("#parada1");
+const parada2 = document.querySelector("#parada2");
+const parada3 = document.querySelector("#parada3");
+const parada4 = document.querySelector("#parada4");
+const parada5 = document.querySelector("#parada5");
+
+// Agrega controladores de eventos de clic para los botones de parada
+parada1.addEventListener("click", () => {
+    if (!mode.checked){
+        train.style.transition = "all 1000ms";
+        train.style.left = positions[1];
+    }
+});
+
+parada2.addEventListener("click", () => {
+    if (!mode.checked) {
+        train.style.transition = "all 1000ms";
+        train.style.left = positions[2];
+    }
+});
+
+parada3.addEventListener("click", () => {
+    if (!mode.checked) {
+        train.style.transition = "all 1000ms";
+        train.style.left = positions[3];
+    }
+});
+
+parada4.addEventListener("click", () => {
+    if (!mode.checked) {
+        train.style.transition = "all 1000ms";
+        train.style.left = positions[4];
+    }
+});
+
+parada5.addEventListener("click", () => {
+    if (!mode.checked) {
+        train.style.transition = "all 1000ms";
+        train.style.left = positions[5];
+    }
+});
