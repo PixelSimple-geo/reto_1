@@ -118,7 +118,6 @@ main {
     background-position: right;
     animation: buttonAnimation 1s infinite alternate ease;
 }
-
 @keyframes buttonAnimation {
     0% {
         transform: scale(1) translateX(-50%);
