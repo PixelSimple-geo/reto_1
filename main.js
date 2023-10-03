@@ -30,17 +30,21 @@ start.addEventListener("click", () => {
     if (mode.checked) {
         start.disabled = true;
         finishCycle.disabled = false;
+
+        train.style.transition = "all 350ms";
+        playNextAnimation(cycle, currentPosition);
+        currentPosition++;
         animationInterval = setInterval(() => {
             if (terminateCycle && currentPosition === 0) {
                 clearInterval(animationInterval);
                 train.style.left = positions[currentPosition];
-                train.style.transition = "all 500ms";
+                train.style.transition = "all 350ms";
                 terminateCycle = false;
             } else {
                 train.style.transition = "all 350ms";
                 playNextAnimation(cycle, currentPosition);
+                currentPosition++;
             }
-            currentPosition++;
             if (currentPosition >= cycle.length) {
                 currentPosition = 0;
             }
@@ -48,7 +52,7 @@ start.addEventListener("click", () => {
     } else {
         const selectElement = document.querySelector('select');
         const selectedIndex = selectElement.selectedIndex;
-        train.style.transition = "all 500ms";
+        train.style.transition = "all 1000ms";
         train.style.left = positions[selectedIndex];
     }
 });
@@ -78,9 +82,7 @@ finishCycle.addEventListener("click", () => {
 
 
 function playNextAnimation(array, index) {
-    if (!terminateCycle || index !== 0) {
-        train.style.left = array[index];
-    }
+    train.style.left = array[index];
 }
 
 /*Deshabilitar destino o ciclo*/
