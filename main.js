@@ -5,6 +5,8 @@ const reset = document.querySelector("#reset");
 const train = document.querySelector(".train");
 const finishCycle = document.querySelector(".terminarCiclo");
 const mode = document.querySelector("#trainMode");
+const luz = document.querySelector(".puertas");
+
 
 let positions = ["0%", "20%", "40%", "60%", "80%", "100%",];
 const cycle = ["20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "20%"];
@@ -48,7 +50,7 @@ start.addEventListener("click", () => {
             if (currentPosition >= cycle.length) {
                 currentPosition = 0;
             }
-        }, 350);
+        }, 5000);
     } else {
         const selectElement = document.querySelector('select');
         const selectedIndex = selectElement.selectedIndex;
@@ -101,6 +103,7 @@ mode.addEventListener("change", () => {
 
 /**/
 // Obtén referencias a los botones de parada
+const parada0 = document.querySelector("#parada0");
 const parada1 = document.querySelector("#parada1");
 const parada2 = document.querySelector("#parada2");
 const parada3 = document.querySelector("#parada3");
@@ -108,6 +111,12 @@ const parada4 = document.querySelector("#parada4");
 const parada5 = document.querySelector("#parada5");
 
 // Agrega controladores de eventos de clic para los botones de parada
+parada0.addEventListener("click", () => {
+    if (!mode.checked){
+        train.style.transition = "all 1000ms";
+        train.style.left = positions[0];
+    }
+});
 parada1.addEventListener("click", () => {
     if (!mode.checked){
         train.style.transition = "all 1000ms";
@@ -120,6 +129,7 @@ parada2.addEventListener("click", () => {
         train.style.transition = "all 1000ms";
         train.style.left = positions[2];
     }
+
 });
 
 parada3.addEventListener("click", () => {
