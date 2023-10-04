@@ -6,155 +6,89 @@ const train = document.querySelector(".train");
 const finishCycle = document.querySelector(".terminarCiclo");
 const mode = document.querySelector("#trainMode");
 const luz = document.querySelector(".puertas");
-
-
+const selectElement = document.querySelector('select');
 
 let positions = ["0%", "20%", "40%", "60%", "80%", "100%",];
 const cycle = ["20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "20%"];
-let MEM_POSIZIOA = 0;
-let SELEK_AUTO_MAN = false;
-let pm = false;
 
-let animationInterval;
-let terminateCycle = false;
+//PLC variables
+let mem_posizioa;
+let select_auto_man;
+let seta;
+let rearme;
+const paradas = [
+    {name : "B1", value: undefined},
+    {name : "B2", value: undefined},
+    {name : "B3", value: undefined},
+    {name : "B4", value: undefined},
+    {name : "B5", value: undefined},
+];
 
 setInterval(() => {
-    getSELECT_AUTO_MAN();
-    getMEM_POSIZIOA();
-    getPM();
+    fetchData().then(()=> {
+        if (seta && rearme) {
+            train.style.transition = "all 2000ms";
+            train.style.left = positions[0];
+        }
+        else if (select_auto_man) {
+            train.style.transition = "all 1000ms";
+            playNextAnimation(cycle, mem_posizioa);
+
+        } else if (!select_auto_man) {
+            train.style.transition = "all 1000ms";
+            for (let i = 0; i < paradas.length; i++) {
+                if (paradas[i].value === true)
+                    train.style.left = positions[i] + 1;
+            }
+
+        }
+    }).catch(error => {console.log("Fetch error: " + error)})
+
 }, 500);
 
-if (SELEK_AUTO_MAN) {
-    mode.checked = true;
-    if (pm) {
-        animationInterval = setInterval(() => {
-            getMEM_POSIZIOA();
-            if (terminateCycle && MEM_POSIZIOA === 0) {
-                clearInterval(animationInterval);
-                train.style.left = positions[MEM_POSIZIOA];
-                train.style.transition = "all 350ms";
-                terminateCycle = false;
-            } else {
-                train.style.transition = "all 1000ms";
-                playNextAnimation(cycle, MEM_POSIZIOA);
-            }
-
-        }, 100);
-    }
-} else {
-    mode.checked = false;
-}
-
 start.addEventListener("click", () => {
-    reset.disabled = true;
-    reset.style.cursor = "not-allowed";
-    modificarPM(true);
-    if (SELEK_AUTO_MAN) {
-        mode.disabled = true;
-        start.disabled = true;
-        start.style.cursor = "not-allowed";
-        finishCycle.disabled = false;
-        finishCycle.style.cursor = "pointer";
-
-//        train.style.transition = "all 350ms";
-//        playNextAnimation(cycle, MEM_POSIZIOA);
-        animationInterval = setInterval(() => {
-            console.log("inside auto")
-            getMEM_POSIZIOA();
-            if (terminateCycle && MEM_POSIZIOA === 0) {
-                clearInterval(animationInterval);
-                train.style.left = positions[MEM_POSIZIOA];
-                train.style.transition = "all 350ms";
-                terminateCycle = false;
-            } else {
-                train.style.transition = "all 1000ms";
-                playNextAnimation(cycle, MEM_POSIZIOA);
-            }
-
-        }, 100);
+    if (mode.checked) {
+        postData("SELEk_AUTO/MAN", true);
+        //TODO hay que activar alguna variable para que el tren se mueva de manera automática?
     } else {
-        const selectElement = document.querySelector('select');
-        const selectedIndex = selectElement.selectedIndex;
-        train.style.transition = "all 1000ms";
-        train.style.left = positions[selectedIndex];
+        postData("SELEk_AUTO/MAN", false);
+        postData("SETA", false);
+        postData("REARME", false);
+        for(let i = 0; i < paradas.length; i++) {
+            if (i !== (selectElement.selectedIndex - 1))
+                paradas[i].value = false;
+        }
+        paradas[selectElement.selectedIndex - 1].value = true;
+        postParadas();
     }
 });
 
-
-
-reset.disabled = true;
-reset.style.cursor = "not-allowed";
 reset.addEventListener("click", () =>{
-    clearInterval(animationInterval);
-    MEM_POSIZIOA = 0;
-    train.style.left = "0%";
-    train.style.transition = "all 2000ms";
-    start.disabled = false;
-    start.style.cursor = "pointer";
-    reset.disabled = true;
-    reset.style.cursor = "not-allowed";
-    finishCycle.disabled = false;
-    finishCycle.style.cursor = "pointer";
-    luz.classList.remove("changeColor")
+    postData("REARME",true);
 });
 
 stopButton.addEventListener("click", () => {
-    clearInterval(animationInterval);
-    luz.classList.remove("changeColor")
-    start.disabled = false;
-    start.style.cursor = "pointer";
-    reset.disabled = false;
-    reset.style.cursor = "pointer";
-    finishCycle.disabled = true;
-    finishCycle.style.cursor = "not-allowed";
-    finishCycle.style.cursor = "not-allowed";
-    mode.disabled = false;
+    postData("SETA", true)
 });
 
 finishCycle.addEventListener("click", () => {
-    terminateCycle = true;
-    start.disabled = false;
-    start.style.cursor = "pointer";
+    //TODO que variable corresponde a terminateCycle?
 });
 
 
-function playNextAnimation(array, index) {
-    train.style.left = array[index];
-    luz.classList.add("changeColor");
 
-    destino.selectedIndex = positions.indexOf(array[index]);
-
-    setTimeout(() => {
-        luz.classList.toggle("changeColor");
-        }, 4900);
-}
 
 /*Deshabilitar destino o ciclo*/
-const destino = document.getElementById("destino")
-destino.disabled = true;
-destino.style.cursor = "not-allowed";
-
+const destino = document.getElementById("destino");
 mode.addEventListener("change", () => {
     if (mode.checked) {
-        modificarSELEK_AUTO(true);
-        destino.disabled = true;
-        destino.style.cursor = "not-allowed";
-        finishCycle.disabled = false;
-        finishCycle.style.cursor = "pointer";
-        train.style.left = positions[0];
-        //TODO llamar fetch
-        getMEM_POSIZIOA();
-        playNextAnimation(cycle, MEM_POSIZIOA);
+
     } else {
-        modificarSELEK_AUTO(false);
-        destino.disabled = false;
-        destino.style.cursor = "pointer";
-        finishCycle.disabled = true;
-        finishCycle.style.cursor = "not-allowed";
+
     }
 });
 
-/**/
+/*
 // Obtén referencias a los botones de parada
 const parada0 = document.querySelector("#parada0");
 const parada1 = document.querySelector("#parada1");
@@ -205,20 +139,12 @@ parada5.addEventListener("click", () => {
         train.style.left = positions[5];
     }
 });
+ */
 
-function resetMEM_POSIZIOA() {
-    MEM_POSIZIOA = 0;
-    modificarMEM_POSIZIOA();
-}
-
-function incrementarMEM_POSIZIOA() {
-    MEM_POSIZIOA++;
-    modificarMEM_POSIZIOA();
-}
-
-function modificarSELEK_AUTO(isAuto) {
+/*
+function postData(variableName, value) {
     const data = new URLSearchParams();
-    data.append('"mis_datos".SELEK_AUTO/MAN', isAuto);
+    data.append('"mis_datos".'+variableName, value);
 
     fetch("http://10.0.2.100/awp/pruebas/index.html", {
         method: 'POST',
@@ -235,79 +161,93 @@ function modificarSELEK_AUTO(isAuto) {
         })
         .catch((error) => {
             console.error('Fetch Error:', error);
+
         });
 }
+ */
 
-function modificarPM(PM) {
+function postData(variableName, value) {
+    const xhr = new XMLHttpRequest();
+    const url = "http://10.0.2.100/awp/pruebas/index.html";
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                console.log("Request successful");
+            } else {
+                console.error("Network response was not ok");
+            }
+        }
+    };
     const data = new URLSearchParams();
-    data.append('"mis_datos".PM', PM);
-
-    fetch("http://10.0.2.100/awp/pruebas/index.html", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: data,
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text();
-        })
-        .catch((error) => {
-            console.error('Fetch Error:', error);
-        });
+    data.append('"mis_datos".'+variableName.toUpperCase(), value);
+    xhr.send(data);
 }
 
-function getMEM_POSIZIOA() {
-    fetch("http://10.0.2.100/awp/pruebas/mem_posizioa.html")
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+function postParadas() {
+    const xhr = new XMLHttpRequest();
+    const url = "http://10.0.2.100/awp/pruebas/index.html";
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                console.log("Request successful");
+            } else {
+                console.error("Network response was not ok");
             }
-            return response.json();
-        })
-        .then((data) => {
-            console.log("getting mem")
-            MEM_POSIZIOA = parseInt(data);
-        })
-        .catch((error) => {
-            console.error('Fetch Error:', error);
-        });
+        }
+    };
+    const data = new URLSearchParams();
+    for (let i = 0; i < paradas.length; i++) {
+        data.append('"mis_datos".'+paradas[i].name.toUpperCase(), paradas[i].value);
+    }
+
+    xhr.send(data);
 }
 
-function getSELECT_AUTO_MAN() {
-    fetch("http://10.0.2.100/awp/pruebas/select_auto_man.html")
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then((data) => {
-            SELEK_AUTO_MAN = data;
-        })
-        .catch((error) => {
-            console.error('Fetch Error:', error);
-        });
+async function fetchData() {
+    console.log("making request")
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", "output_variables.html", true);
+    xhr.setRequestHeader("Cache-Control", "no-store");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let div = document.createElement("div");
+            div.innerHTML = xhr.responseText;
+
+            mem_posizioa = parseInt(div.querySelector("#MEM_POSIZIOA").textContent) - 1;
+            select_auto_man = returnValueAsBoolean(div.querySelector("#SELEK_AUTO_MAN").textContent);
+            seta = returnValueAsBoolean(div.querySelector("#SETA").textContent);
+            rearme = returnValueAsBoolean(div.querySelector("#REARME").textContent);
+            paradas[0].value = returnValueAsBoolean(div.querySelector("#B1").textContent);
+            paradas[1].value = returnValueAsBoolean(div.querySelector("#B2").textContent);
+            paradas[2].value = returnValueAsBoolean(div.querySelector("#B3").textContent);
+            paradas[3].value = returnValueAsBoolean(div.querySelector("#B4").textContent);
+            paradas[4].value = returnValueAsBoolean(div.querySelector("#B5").textContent);
+        }
+    };
+    xhr.send();
 }
 
+function returnValueAsBoolean(value) {
+    value = parseInt(value);
+    if (value === 1)
+        return true;
+    return false;
+}
 
+function playNextAnimation(array, index) {
+    train.style.transition = "all 1000ms";
+    train.style.left = array[index];
+    destino.selectedIndex = positions.indexOf(array[index]);
 
-function getPM() {
-    fetch("http://10.0.2.100/awp/pruebas/pm.html")
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then((data) => {
-            console.log("getting pm")
-            pm = data;
-        })
-        .catch((error) => {
-            console.error('Fetch Error:', error);
-        });
+    luz.classList.add("changeColor");
+    setTimeout(() => {luz.classList.toggle("changeColor");}, 4900);
 }
