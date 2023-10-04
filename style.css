@@ -267,17 +267,42 @@ input:checked+.desliz:before {
     position: absolute;
     top: 10px;
     left: 10px;
+    box-shadow: 0 0 10px 1px red;
+}
+
+.changeColor {
+    animation-delay: 0s;
+    animation-duration: 5s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+    animation-name: changeColor;
 }
 
 @keyframes changeColor {
      0% {
-         background-color: orange;
+         background-color: red;
+         box-shadow: 0 0 10px 1px red;
      }
+
+    25% {
+        background-color: orange;
+        box-shadow: 0 0 10px 1px orange;
+    }
+
      50% {
          background-color: green;
+         box-shadow: 0 0 10px 1px green;
      }
+
+    75% {
+        background-color: orange;
+        box-shadow: 0 0 10px 1px orange;
+    }
+
      100% {
-         background-color: orange;
+         background-color: red;
+         box-shadow: 0 0 10px 1px red;
      }
  }
 

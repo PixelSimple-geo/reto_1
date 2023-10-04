@@ -8,6 +8,7 @@ const mode = document.querySelector("#trainMode");
 const luz = document.querySelector(".puertas");
 
 
+
 let positions = ["0%", "20%", "40%", "60%", "80%", "100%",];
 const cycle = ["20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "20%"];
 let currentPosition = 0;
@@ -43,6 +44,7 @@ start.addEventListener("click", () => {
                 train.style.transition = "all 350ms";
                 terminateCycle = false;
             } else {
+
                 train.style.transition = "all 350ms";
                 playNextAnimation(cycle, currentPosition);
                 currentPosition++;
@@ -50,6 +52,7 @@ start.addEventListener("click", () => {
             if (currentPosition >= cycle.length) {
                 currentPosition = 0;
             }
+
         }, 5000);
     } else {
         const selectElement = document.querySelector('select');
@@ -84,7 +87,12 @@ finishCycle.addEventListener("click", () => {
 
 
 function playNextAnimation(array, index) {
+
     train.style.left = array[index];
+    luz.classList.add("changeColor");
+    setTimeout(() => {
+        luz.classList.toggle("changeColor");
+        }, 4900);
 }
 
 /*Deshabilitar destino o ciclo*/
