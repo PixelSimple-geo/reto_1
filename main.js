@@ -15,6 +15,14 @@ let MEM_POSIZIOA = 0;
 let animationInterval;
 let terminateCycle = false;
 
+let stopCounts = {
+    "20%": 0,
+    "40%": 0,
+    "60%": 0,
+    "80%": 0,
+    "100%": 0,
+};
+
 // start
 let pm;
 let pausa;
@@ -27,6 +35,33 @@ let p3;
 let p4;
 let p5;
 
+/*Funcion para incrementar el contador de paradas*/
+function incrementStopCount(location) {
+    stopCounts[location]++;
+    localStorage.setItem("stopCounts", JSON.stringify(stopCounts));
+    updateStopCountDisplay();
+}
+
+// Initialize stop counts on page load
+window.onload = function () {
+    if (localStorage.getItem("stopCounts")) {
+        stopCounts = JSON.parse(localStorage.getItem("stopCounts"));
+        updateStopCountDisplay();
+    }
+};
+
+// Function to update the stop count display
+function updateStopCountDisplay() {
+    for (const location in stopCounts) {
+        const count = stopCounts[location];
+        const countElement = document.getElementById(`count-${location}`);
+        if (countElement) {
+            countElement.textContent = count;
+        }
+    }
+}
+
+/*Boton start*/
 start.addEventListener("click", () => {
     reset.disabled = true;
     reset.style.cursor = "not-allowed";
@@ -62,11 +97,13 @@ start.addEventListener("click", () => {
     } else {
         const selectElement = document.querySelector('select');
         const selectedIndex = selectElement.selectedIndex;
+
         train.style.transition = "all 1000ms";
         train.style.left = positions[selectedIndex];
     }
 });
 
+/*Reset*/
 reset.disabled = true;
 reset.style.cursor = "not-allowed";
 reset.addEventListener("click", () =>{
@@ -83,6 +120,7 @@ reset.addEventListener("click", () =>{
     luz.classList.remove("changeColor")
 });
 
+/*Stop*/
 stopButton.addEventListener("click", () => {
     clearInterval(animationInterval);
     luz.classList.remove("changeColor");
@@ -96,6 +134,7 @@ stopButton.addEventListener("click", () => {
     mode.disabled = false;
 });
 
+/*Finalizar ciclo*/
 finishCycle.addEventListener("click", () => {
     terminateCycle = true;
     start.disabled = false;
@@ -104,15 +143,17 @@ finishCycle.addEventListener("click", () => {
 
 
 function playNextAnimation(array, index) {
-    train.style.left = array[index];
+    const location = array[index];
+    train.style.left = location;
     luz.classList.add("changeColor");
 
-    const currentPositionValue = positions.indexOf(array[index]);
+    const currentPositionValue = positions.indexOf(location);
     destino.selectedIndex = currentPositionValue;
 
     setTimeout(() => {
         luz.classList.toggle("changeColor");
-        }, 4900);
+        incrementStopCount(location);
+    }, 4900);
 }
 
 /*Deshabilitar destino o ciclo*/
@@ -159,6 +200,7 @@ parada1.addEventListener("click", () => {
         train.style.transition = "all 1000ms";
         train.style.left = positions[1];
         destino.selectedIndex = 1;
+        incrementStopCount(positions[1]);
     }
 });
 
@@ -167,6 +209,7 @@ parada2.addEventListener("click", () => {
         train.style.transition = "all 1000ms";
         train.style.left = positions[2];
         destino.selectedIndex = 2;
+        incrementStopCount(positions[2]);
     }
 
 });
@@ -176,6 +219,7 @@ parada3.addEventListener("click", () => {
         train.style.transition = "all 1000ms";
         train.style.left = positions[3];
         destino.selectedIndex = 3;
+        incrementStopCount(positions[3]);
     }
 });
 
@@ -184,6 +228,7 @@ parada4.addEventListener("click", () => {
         train.style.transition = "all 1000ms";
         train.style.left = positions[4];
         destino.selectedIndex = 4;
+        incrementStopCount(positions[4]);
     }
 });
 
@@ -192,9 +237,11 @@ parada5.addEventListener("click", () => {
         train.style.transition = "all 1000ms";
         train.style.left = positions[5];
         destino.selectedIndex = 5;
+        incrementStopCount(positions[5]);
     }
 });
 
+/*PLC*/
 function resetMEM_POSIZIOA() {
     MEM_POSIZIOA = 0;
     modificarMEM_POSIZIOA();
