@@ -85,7 +85,7 @@ reset.addEventListener("click", () =>{
 
 stopButton.addEventListener("click", () => {
     clearInterval(animationInterval);
-    luz.classList.remove("changeColor")
+    luz.classList.remove("changeColor");
     start.disabled = false;
     start.style.cursor = "pointer";
     reset.disabled = false;
