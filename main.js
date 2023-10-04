@@ -8,9 +8,10 @@ const mode = document.querySelector("#trainMode");
 const luz = document.querySelector(".puertas");
 
 
+
 let positions = ["0%", "20%", "40%", "60%", "80%", "100%",];
 const cycle = ["20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "20%"];
-let currentPosition = 0;
+let MEM_POSIZIOA = 0;
 let animationInterval;
 let terminateCycle = false;
 
@@ -20,7 +21,6 @@ let pausa;
 // emergencia reset
 let seta;
 /*Paradas*/
-let memPosizioa;
 let p1;
 let p2;
 let p3;
@@ -39,22 +39,23 @@ start.addEventListener("click", () => {
 
 
         train.style.transition = "all 350ms";
-        playNextAnimation(cycle, currentPosition);
-        currentPosition++;
+        playNextAnimation(cycle, MEM_POSIZIOA);
+        incrementarMEM_POSIZIOA()
         animationInterval = setInterval(() => {
-            if (terminateCycle && currentPosition === 0) {
+            if (terminateCycle && MEM_POSIZIOA === 0) {
                 clearInterval(animationInterval);
-                train.style.left = positions[currentPosition];
+                train.style.left = positions[MEM_POSIZIOA];
                 train.style.transition = "all 350ms";
                 terminateCycle = false;
             } else {
 
                 train.style.transition = "all 350ms";
-                playNextAnimation(cycle, currentPosition);
-                currentPosition++;
+                playNextAnimation(cycle, MEM_POSIZIOA);
+                incrementarMEM_POSIZIOA()
             }
-            if (currentPosition >= cycle.length) {
-                currentPosition = 0;
+            if (MEM_POSIZIOA >= cycle.length) {
+                incrementarMEM_POSIZIOA();
+                resetMEM_POSIZIOA()
             }
 
         }, 5000);
@@ -70,7 +71,7 @@ reset.disabled = true;
 reset.style.cursor = "not-allowed";
 reset.addEventListener("click", () =>{
     clearInterval(animationInterval);
-    currentPosition = 0;
+    MEM_POSIZIOA = 0;
     train.style.left = "0%";
     train.style.transition = "all 2000ms";
     start.disabled = false;
@@ -126,7 +127,8 @@ mode.addEventListener("change", () => {
         finishCycle.disabled = false;
         finishCycle.style.cursor = "pointer";
         train.style.left = positions[0];
-        currentPosition = 0;
+        //TODO llamar fetch
+        MEM_POSIZIOA = 0;
     } else {
         destino.disabled = false;
         destino.style.cursor = "pointer";
@@ -187,4 +189,51 @@ parada5.addEventListener("click", () => {
     }
 });
 
-/**/
+function resetMEM_POSIZIOA() {
+    MEM_POSIZIOA = 0;
+    modificarMEM_POSIZIOA();
+}
+
+function incrementarMEM_POSIZIOA() {
+    MEM_POSIZIOA++;
+    modificarMEM_POSIZIOA();
+}
+
+function modificarMEM_POSIZIOA() {
+    const data = new URLSearchParams();
+    data.append('"mis_datos".MEM_POSIZIOA', MEM_POSIZIOA);
+
+    fetch("http://10.0.2.100/awp/pruebas/index.html", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: data,
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text(); // Assuming the response is text
+        })
+        .catch((error) => {
+            console.error('Fetch Error:', error);
+        });
+}
+
+
+function getMEM_POSIZIOA() {
+    fetch("http://10.0.2.100/awp/pruebas/mem_posizioa.html")
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            MEM_POSIZIOA = parseInt(data);
+        })
+        .catch((error) => {
+            console.error('Fetch Error:', error);
+        });
+}
