@@ -97,7 +97,7 @@ main {
     transform: translateX(-50%);
 }
 .line button {
-    background-image: linear-gradient(to left, #FFC312, #EE5A24, #FFC312);
+    background-image: linear-gradient(to left, #ffc312, #EE5A24, #FFC312);
     border: none;
     cursor: pointer;
     font-size: var(--step--1);
@@ -180,8 +180,12 @@ main {
     border: 1px solid var(--borderColor);
     background-color: inherit;
     cursor: pointer;
+    transition: 0.5s;
 }
-
+.controllers button:not(button:disabled):hover{
+    background-color: black;
+    color: white;
+}
 .destino-wrapper {
     height: 100%;
 }
@@ -221,7 +225,8 @@ main {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ff0000;
+    background-image: linear-gradient(to left, #ffc312, #EE5A24);
+    background-size: 200%;
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -239,7 +244,7 @@ main {
 }
 
 input:checked+.desliz {
-    background-color: #0046ff;
+    background-position: right;
 }
 
 input:checked+.desliz:before {
@@ -256,6 +261,11 @@ input:checked+.desliz:before {
 
 .desliz.redondo:before {
     border-radius: 50%;
+}
+
+/*Combobox*/
+select{
+    border-radius: 15px;
 }
 
 /*Puertas*/

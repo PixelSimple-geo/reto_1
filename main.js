@@ -30,9 +30,13 @@ let p5;
 
 start.addEventListener("click", () => {
     reset.disabled = true;
+    reset.style.cursor = "not-allowed";
     if (mode.checked) {
         start.disabled = true;
+        start.style.cursor = "not-allowed";
         finishCycle.disabled = false;
+        finishCycle.style.cursor = "pointer";
+
 
         train.style.transition = "all 350ms";
         playNextAnimation(cycle, currentPosition);
@@ -63,31 +67,41 @@ start.addEventListener("click", () => {
 });
 
 reset.disabled = true;
+reset.style.cursor = "not-allowed";
 reset.addEventListener("click", () =>{
     clearInterval(animationInterval);
     currentPosition = 0;
-    start.disabled = false;
     train.style.left = "0%";
     train.style.transition = "all 2000ms";
+    start.disabled = false;
+    start.style.cursor = "pointer";
     reset.disabled = true;
+    reset.style.cursor = "not-allowed";
     finishCycle.disabled = false;
+    finishCycle.style.cursor = "pointer";
+    luz.classList.remove("changeColor")
 });
 
 stopButton.addEventListener("click", () => {
     clearInterval(animationInterval);
+    luz.classList.remove("changeColor")
     start.disabled = false;
+    start.style.cursor = "pointer";
     reset.disabled = false;
+    reset.style.cursor = "pointer";
     finishCycle.disabled = true;
+    finishCycle.style.cursor = "not-allowed";
+    finishCycle.style.cursor = "not-allowed";
 });
 
 finishCycle.addEventListener("click", () => {
     terminateCycle = true;
     start.disabled = false;
+    start.style.cursor = "pointer";
 });
 
 
 function playNextAnimation(array, index) {
-
     train.style.left = array[index];
     luz.classList.add("changeColor");
     setTimeout(() => {
@@ -98,14 +112,19 @@ function playNextAnimation(array, index) {
 /*Deshabilitar destino o ciclo*/
 const destino = document.getElementById("destino")
 destino.disabled = true;
+destino.style.cursor = "not-allowed";
 
 mode.addEventListener("change", () => {
     if (mode.checked) {
         destino.disabled = true;
+        destino.style.cursor = "not-allowed";
         finishCycle.disabled = false;
+        finishCycle.style.cursor = "pointer";
     } else {
         destino.disabled = false;
+        destino.style.cursor = "pointer";
         finishCycle.disabled = true;
+        finishCycle.style.cursor = "not-allowed";
     }
 });
 
