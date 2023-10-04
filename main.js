@@ -12,53 +12,66 @@ const luz = document.querySelector(".puertas");
 let positions = ["0%", "20%", "40%", "60%", "80%", "100%",];
 const cycle = ["20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "20%"];
 let MEM_POSIZIOA = 0;
+let SELEK_AUTO_MAN = false;
+let pm = false;
+
 let animationInterval;
 let terminateCycle = false;
 
-// start
-let pm;
-let pausa;
-// emergencia reset
-let seta;
-/*Paradas*/
-let p1;
-let p2;
-let p3;
-let p4;
-let p5;
+setInterval(() => {
+    getSELECT_AUTO_MAN();
+    getMEM_POSIZIOA();
+    getPM();
+}, 500);
 
-start.addEventListener("click", () => {
-    reset.disabled = true;
-    reset.style.cursor = "not-allowed";
-    if (mode.checked) {
-        mode.disabled = true;
-        start.disabled = true;
-        start.style.cursor = "not-allowed";
-        finishCycle.disabled = false;
-        finishCycle.style.cursor = "pointer";
-
-
-        train.style.transition = "all 350ms";
-        playNextAnimation(cycle, MEM_POSIZIOA);
-        incrementarMEM_POSIZIOA()
+if (SELEK_AUTO_MAN) {
+    mode.checked = true;
+    if (pm) {
         animationInterval = setInterval(() => {
+            getMEM_POSIZIOA();
             if (terminateCycle && MEM_POSIZIOA === 0) {
                 clearInterval(animationInterval);
                 train.style.left = positions[MEM_POSIZIOA];
                 train.style.transition = "all 350ms";
                 terminateCycle = false;
             } else {
-
-                train.style.transition = "all 350ms";
+                train.style.transition = "all 1000ms";
                 playNextAnimation(cycle, MEM_POSIZIOA);
-                incrementarMEM_POSIZIOA()
-            }
-            if (MEM_POSIZIOA >= cycle.length) {
-                incrementarMEM_POSIZIOA();
-                resetMEM_POSIZIOA()
             }
 
-        }, 5000);
+        }, 100);
+    }
+} else {
+    mode.checked = false;
+}
+
+start.addEventListener("click", () => {
+    reset.disabled = true;
+    reset.style.cursor = "not-allowed";
+    modificarPM(true);
+    if (SELEK_AUTO_MAN) {
+        mode.disabled = true;
+        start.disabled = true;
+        start.style.cursor = "not-allowed";
+        finishCycle.disabled = false;
+        finishCycle.style.cursor = "pointer";
+
+//        train.style.transition = "all 350ms";
+//        playNextAnimation(cycle, MEM_POSIZIOA);
+        animationInterval = setInterval(() => {
+            console.log("inside auto")
+            getMEM_POSIZIOA();
+            if (terminateCycle && MEM_POSIZIOA === 0) {
+                clearInterval(animationInterval);
+                train.style.left = positions[MEM_POSIZIOA];
+                train.style.transition = "all 350ms";
+                terminateCycle = false;
+            } else {
+                train.style.transition = "all 1000ms";
+                playNextAnimation(cycle, MEM_POSIZIOA);
+            }
+
+        }, 100);
     } else {
         const selectElement = document.querySelector('select');
         const selectedIndex = selectElement.selectedIndex;
@@ -66,6 +79,8 @@ start.addEventListener("click", () => {
         train.style.left = positions[selectedIndex];
     }
 });
+
+
 
 reset.disabled = true;
 reset.style.cursor = "not-allowed";
@@ -107,8 +122,7 @@ function playNextAnimation(array, index) {
     train.style.left = array[index];
     luz.classList.add("changeColor");
 
-    const currentPositionValue = positions.indexOf(array[index]);
-    destino.selectedIndex = currentPositionValue;
+    destino.selectedIndex = positions.indexOf(array[index]);
 
     setTimeout(() => {
         luz.classList.toggle("changeColor");
@@ -122,14 +136,17 @@ destino.style.cursor = "not-allowed";
 
 mode.addEventListener("change", () => {
     if (mode.checked) {
+        modificarSELEK_AUTO(true);
         destino.disabled = true;
         destino.style.cursor = "not-allowed";
         finishCycle.disabled = false;
         finishCycle.style.cursor = "pointer";
         train.style.left = positions[0];
         //TODO llamar fetch
-        MEM_POSIZIOA = 0;
+        getMEM_POSIZIOA();
+        playNextAnimation(cycle, MEM_POSIZIOA);
     } else {
+        modificarSELEK_AUTO(false);
         destino.disabled = false;
         destino.style.cursor = "pointer";
         finishCycle.disabled = true;
@@ -199,9 +216,9 @@ function incrementarMEM_POSIZIOA() {
     modificarMEM_POSIZIOA();
 }
 
-function modificarMEM_POSIZIOA() {
+function modificarSELEK_AUTO(isAuto) {
     const data = new URLSearchParams();
-    data.append('"mis_datos".MEM_POSIZIOA', MEM_POSIZIOA);
+    data.append('"mis_datos".SELEK_AUTO/MAN', isAuto);
 
     fetch("http://10.0.2.100/awp/pruebas/index.html", {
         method: 'POST',
@@ -214,13 +231,34 @@ function modificarMEM_POSIZIOA() {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.text(); // Assuming the response is text
+            return response.text();
         })
         .catch((error) => {
             console.error('Fetch Error:', error);
         });
 }
 
+function modificarPM(PM) {
+    const data = new URLSearchParams();
+    data.append('"mis_datos".PM', PM);
+
+    fetch("http://10.0.2.100/awp/pruebas/index.html", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: data,
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .catch((error) => {
+            console.error('Fetch Error:', error);
+        });
+}
 
 function getMEM_POSIZIOA() {
     fetch("http://10.0.2.100/awp/pruebas/mem_posizioa.html")
@@ -231,7 +269,43 @@ function getMEM_POSIZIOA() {
             return response.json();
         })
         .then((data) => {
+            console.log("getting mem")
             MEM_POSIZIOA = parseInt(data);
+        })
+        .catch((error) => {
+            console.error('Fetch Error:', error);
+        });
+}
+
+function getSELECT_AUTO_MAN() {
+    fetch("http://10.0.2.100/awp/pruebas/select_auto_man.html")
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            SELEK_AUTO_MAN = data;
+        })
+        .catch((error) => {
+            console.error('Fetch Error:', error);
+        });
+}
+
+
+
+function getPM() {
+    fetch("http://10.0.2.100/awp/pruebas/pm.html")
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log("getting pm")
+            pm = data;
         })
         .catch((error) => {
             console.error('Fetch Error:', error);
