@@ -37,7 +37,7 @@ start.addEventListener("click", () => {
 
         train.style.transition = "all 350ms";
         playNextAnimation(cycle, MEM_POSIZIOA);
-        MEM_POSIZIOA++;
+        incrementarMEM_POSIZIOA()
         animationInterval = setInterval(() => {
             if (terminateCycle && MEM_POSIZIOA === 0) {
                 clearInterval(animationInterval);
@@ -48,10 +48,11 @@ start.addEventListener("click", () => {
 
                 train.style.transition = "all 350ms";
                 playNextAnimation(cycle, MEM_POSIZIOA);
-                MEM_POSIZIOA++;
+                incrementarMEM_POSIZIOA()
             }
             if (MEM_POSIZIOA >= cycle.length) {
-                MEM_POSIZIOA = 0;
+                incrementarMEM_POSIZIOA();
+                resetMEM_POSIZIOA()
             }
 
         }, 5000);
@@ -177,6 +178,10 @@ parada5.addEventListener("click", () => {
     }
 });
 
+function resetMEM_POSIZIOA() {
+    MEM_POSIZIOA = 0;
+    modificarMEM_POSIZIOA();
+}
 
 function incrementarMEM_POSIZIOA() {
     MEM_POSIZIOA++;
@@ -207,7 +212,7 @@ function modificarMEM_POSIZIOA() {
 
 
 function getMEM_POSIZIOA() {
-    fetch("http://10.0.2.100/awp/pruebas/index.html")
+    fetch("http://10.0.2.100/awp/pruebas/mem_posizioa.html")
         .then((response) => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
