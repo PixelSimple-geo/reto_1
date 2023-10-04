@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p id="testing"></p>
+<span id="MEM_POSIZIOA">:="mis_datos".MEM_POSIZIOA:</span>
+<span id="SELEK_AUTO_MAN">:="mis_datos".SELEK_AUTO/MAN:</span>
+<span id="B1">:="mis_datos".B1:</span>
+<span id="B2">:="mis_datos".B2:</span>
+<span id="B3">:="mis_datos".B3:</span>
+<span id="B4">:="mis_datos".B4:</span>
+<span id="B5">:="mis_datos".B5:</span>
+<span id="SETA">:="mis_datos".SETA:</span>
+<span id="REARME">:="mis_datos".REARME:</span>
+</body>
+<script type="text/javascript" defer>
+  let mem_posizioa;
+  let select_auto_man;
+  let b1;
+  let b2;
+  let b3;
+  let b4;
+  let b5;
+  let seta;
+  let rearme;
+
+  function fetchDataAndDisplay() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "output_variables.html", true);
+    xhr.setRequestHeader("Cache-Control", "no-store");
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        let result = xhr.responseText;
+        let div = document.createElement("div");
+        div.innerHTML = result;
+        mem_posizioa = div.querySelector("#MEM_POSIZIOA").textContent;
+        select_auto_man = div.querySelector("#SELEK_AUTO_MAN").textContent;
+        seta = div.querySelector("#SETA").textContent;
+        rearme = div.querySelector("#REARME").textContent;
+        b1 = div.querySelector("#B1").textContent;
+        b2 = div.querySelector("#B2").textContent;
+        b3 = div.querySelector("#B3").textContent;
+        b4 = div.querySelector("#B4").textContent;
+        b5 = div.querySelector("#B5").textContent;
+        console.log(mem_posizioa);
+        console.log(select_auto_man);
+        console.log(seta);
+        console.log(rearme);
+        console.log(b1)
+      }
+    };
+
+    xhr.send();
+  }
+
+  // Call fetchDataAndDisplay initially
+  fetchDataAndDisplay();
+
+  // Set up an interval to call fetchDataAndDisplay every 1000 milliseconds (1 second)
+  setInterval(fetchDataAndDisplay, 1000);
+
+</script>
+</html>
