@@ -127,7 +127,7 @@ mode.addEventListener("change", () => {
         finishCycle.disabled = false;
         finishCycle.style.cursor = "pointer";
         train.style.left = positions[0];
-        //TODO llamar fetch
+        //TODO fetch
         MEM_POSIZIOA = 0;
     } else {
         destino.disabled = false;
@@ -151,12 +151,14 @@ parada0.addEventListener("click", () => {
     if (!mode.checked){
         train.style.transition = "all 1000ms";
         train.style.left = positions[0];
+        destino.selectedIndex = 0;
     }
 });
 parada1.addEventListener("click", () => {
     if (!mode.checked){
         train.style.transition = "all 1000ms";
         train.style.left = positions[1];
+        destino.selectedIndex = 1;
     }
 });
 
@@ -164,6 +166,7 @@ parada2.addEventListener("click", () => {
     if (!mode.checked) {
         train.style.transition = "all 1000ms";
         train.style.left = positions[2];
+        destino.selectedIndex = 2;
     }
 
 });
@@ -172,6 +175,7 @@ parada3.addEventListener("click", () => {
     if (!mode.checked) {
         train.style.transition = "all 1000ms";
         train.style.left = positions[3];
+        destino.selectedIndex = 3;
     }
 });
 
@@ -179,6 +183,7 @@ parada4.addEventListener("click", () => {
     if (!mode.checked) {
         train.style.transition = "all 1000ms";
         train.style.left = positions[4];
+        destino.selectedIndex = 4;
     }
 });
 
@@ -186,6 +191,7 @@ parada5.addEventListener("click", () => {
     if (!mode.checked) {
         train.style.transition = "all 1000ms";
         train.style.left = positions[5];
+        destino.selectedIndex = 5;
     }
 });
 
