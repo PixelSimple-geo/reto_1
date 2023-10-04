@@ -8,7 +8,6 @@ const mode = document.querySelector("#trainMode");
 const luz = document.querySelector(".puertas");
 
 
-
 let positions = ["0%", "20%", "40%", "60%", "80%", "100%",];
 const cycle = ["20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "20%"];
 let currentPosition = 0;
@@ -32,6 +31,7 @@ start.addEventListener("click", () => {
     reset.disabled = true;
     reset.style.cursor = "not-allowed";
     if (mode.checked) {
+        mode.disabled = true;
         start.disabled = true;
         start.style.cursor = "not-allowed";
         finishCycle.disabled = false;
@@ -92,6 +92,7 @@ stopButton.addEventListener("click", () => {
     finishCycle.disabled = true;
     finishCycle.style.cursor = "not-allowed";
     finishCycle.style.cursor = "not-allowed";
+    mode.disabled = false;
 });
 
 finishCycle.addEventListener("click", () => {
@@ -104,6 +105,10 @@ finishCycle.addEventListener("click", () => {
 function playNextAnimation(array, index) {
     train.style.left = array[index];
     luz.classList.add("changeColor");
+
+    const currentPositionValue = positions.indexOf(array[index]);
+    destino.selectedIndex = currentPositionValue;
+
     setTimeout(() => {
         luz.classList.toggle("changeColor");
         }, 4900);
@@ -120,6 +125,8 @@ mode.addEventListener("change", () => {
         destino.style.cursor = "not-allowed";
         finishCycle.disabled = false;
         finishCycle.style.cursor = "pointer";
+        train.style.left = positions[0];
+        currentPosition = 0;
     } else {
         destino.disabled = false;
         destino.style.cursor = "pointer";
@@ -179,3 +186,5 @@ parada5.addEventListener("click", () => {
         train.style.left = positions[5];
     }
 });
+
+/**/
