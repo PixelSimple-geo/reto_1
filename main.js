@@ -45,6 +45,7 @@ setInterval(() => {
         }
         else if (select_auto_man) {
             if (pfc === true && mem_posizioa === 0) {
+                train.style.left = positions[1];
                 setTimeout(() => {train.style.left = positions[0];}, 2000);
                 postData("PFC", false);
                 postData("PM", false);
@@ -53,10 +54,12 @@ setInterval(() => {
                 playNextAnimation(cycle, mem_posizioa);
             }
         } else if (!select_auto_man) {
-            train.style.transition = "all 1000ms";
-            for (let i = 0; i < paradas.length; i++) {
-                if (paradas[i].value === true)
-                    train.style.left = positions[i];
+            if (pm) {
+                train.style.transition = "all 1000ms";
+                for (let i = 0; i < paradas.length; i++) {
+                    if (paradas[i].value === true)
+                        train.style.left = positions[i];
+                }
             }
 
         }
@@ -92,10 +95,12 @@ reset.addEventListener("click", () => {
 
 stopButton.addEventListener("click", () => {
     postData("SETA", true)
+    postData("PM", false);
 });
 
 finishCycle.addEventListener("click", () => {
-    postData("PFC", true);
+    if (!seta)
+        postData("PFC", true);
 });
 
 
@@ -103,10 +108,19 @@ mode.addEventListener("change", () => {
     if (mode.checked) {
         postData("SELEK_AUTO/MAN", true);
         postData("PM", false);
+        train.style.left = positions[0];
+        for (let i = 0; i < paradas.length; i++) {
+            paradas[i].value = false
+        }
+        postParadas();
     } else {
         postData("SELEK_AUTO/MAN", false)
         postData("PM", false);
         train.style.left = positions[0];
+        for (let i = 0; i < paradas.length; i++) {
+            paradas[i].value = false
+        }
+        postParadas();
     }
 });
 
