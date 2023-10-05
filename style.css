@@ -285,7 +285,7 @@ select{
     animation-duration: 5s;
     animation-iteration-count: 1;
     animation-timing-function: linear;
-    animation-fill-mode: forwards;
+    animation-fill-mode: both;
     animation-name: changeColor;
 }
 
@@ -354,7 +354,7 @@ footer ul {
     margin: 5em 0;
 }
 
-.grafico{
+.grafico {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -362,7 +362,8 @@ footer ul {
     margin: 5em auto;
     padding: 20px;
     width: 800px;
-    height: 700px;
+    max-height: calc(100vh - 10em);
+    overflow: unset;
 }
 
 .grafico label{

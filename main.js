@@ -66,7 +66,36 @@ setInterval(() => {
     }).catch(error => {console.log("Fetch error: " + error)})
 
 }, 500);
+/*
+Funcion para incrementar el contador de paradas
+function incrementStopCount(location) {
+    stopCounts[location]++;
+    localStorage.setItem("stopCounts", JSON.stringify(stopCounts));
+    updateStopCountDisplay();
+}
 
+// Initialize stop counts on page load
+window.onload = function () {
+    if (localStorage.getItem("stopCounts")) {
+        stopCounts = JSON.parse(localStorage.getItem("stopCounts"));
+        updateStopCountDisplay();
+    }
+};
+
+// Function to update the stop count display
+function updateStopCountDisplay() {
+    for (const location in stopCounts) {
+        const count = stopCounts[location];
+        const countElement = document.getElementById(`count-${location}`);
+        if (countElement) {
+            countElement.textContent = count;
+        }
+    }
+}
+
+*/
+
+/*Boton start*/
 start.addEventListener("click", () => {
     if (mode.checked) {
         postData("PM", true);
