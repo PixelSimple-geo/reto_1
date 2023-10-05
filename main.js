@@ -6,7 +6,8 @@ const train = document.querySelector(".train");
 const finishCycle = document.querySelector(".terminarCiclo");
 const mode = document.querySelector("#trainMode");
 const luz = document.querySelector(".puertas");
-const selectElement = document.querySelector('select');
+train.style.left = positions[selectElement.selectedIndex];
+
 
 let positions = ["0%", "20%", "40%", "60%", "80%", "100%",];
 const cycle = ["20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "20%"];
