@@ -197,7 +197,6 @@ const destino = document.getElementById("destino");
 
 /*
 // Obtén referencias a los botones de parada
-const parada0 = document.querySelector("#parada0");
 const parada1 = document.querySelector("#parada1");
 const parada2 = document.querySelector("#parada2");
 const parada3 = document.querySelector("#parada3");
@@ -205,48 +204,51 @@ const parada4 = document.querySelector("#parada4");
 const parada5 = document.querySelector("#parada5");
 
 // Agrega controladores de eventos de clic para los botones de parada
-parada0.addEventListener("click", () => {
-    if (!mode.checked){
-        train.style.transition = "all 1000ms";
-        train.style.left = positions[0];
-    }
-});
 parada1.addEventListener("click", () => {
-    if (!mode.checked){
-        train.style.transition = "all 1000ms";
-        train.style.left = positions[1];
+    for(let i = 0; i < paradas.length; i++) {
+        if (i !== selectElement.selectedIndex)
+            paradas[i].value = false;
     }
+    paradas[1] = true;
+    postParadas();
 });
 
 parada2.addEventListener("click", () => {
-    if (!mode.checked) {
-        train.style.transition = "all 1000ms";
-        train.style.left = positions[2];
+    for(let i = 0; i < paradas.length; i++) {
+        if (i !== selectElement.selectedIndex)
+            paradas[i].value = false;
     }
-
+    paradas[2] = true;
+    postParadas();
 });
 
 parada3.addEventListener("click", () => {
-    if (!mode.checked) {
-        train.style.transition = "all 1000ms";
-        train.style.left = positions[3];
+    for(let i = 0; i < paradas.length; i++) {
+        if (i !== selectElement.selectedIndex)
+            paradas[i].value = false;
     }
+    paradas[3] = true;
+    postParadas();
 });
 
 parada4.addEventListener("click", () => {
-    if (!mode.checked) {
-        train.style.transition = "all 1000ms";
-        train.style.left = positions[4];
+    for(let i = 0; i < paradas.length; i++) {
+        if (i !== selectElement.selectedIndex)
+            paradas[i] = false;
     }
+    paradas[4] = true;
+    postParadas();
 });
 
 parada5.addEventListener("click", () => {
-    if (!mode.checked) {
-        train.style.transition = "all 1000ms";
-        train.style.left = positions[5];
+    for(let i = 0; i < paradas.length; i++) {
+        if (i !== selectElement.selectedIndex)
+            paradas[i].value = false;
     }
-});
- */
+    paradas[5] = true;
+    postParadas();
+});*/
+
 
 /*
 function postData(variableName, value) {
@@ -356,7 +358,8 @@ function playNextAnimation(array, index) {
     train.style.transition = "all 1000ms";
     train.style.left = array[index];
     destino.selectedIndex = positions.indexOf(array[index]);
-    incrementStopCount(location);
+
+    incrementStopCount(array[index]);
 
     luz.classList.add("changeColor");
     setTimeout(() => {luz.classList.toggle("changeColor");}, 4900);
