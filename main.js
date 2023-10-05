@@ -103,6 +103,7 @@ mode.addEventListener("change", () => {
     if (mode.checked) {
         postData("SELEK_AUTO/MAN", true);
         postData("PM", false);
+        train.style.left = positions[0];
     } else {
         postData("SELEK_AUTO/MAN", false)
         postData("PM", false);
