@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     var grafico = document.getElementById("graph").getContext("2d");
     const positions = ["20%", "40%", "60%", "80%", "100%"];
+    const labels = ["P1", "P2", "P3", "P4", "P5"];
 
     function updateChart() {
         var data = [0, 0, 0, 0, 0];
@@ -17,12 +18,12 @@ document.addEventListener("DOMContentLoaded", function() {
         var chart = new Chart(grafico, {
             type: "bar",
             data: {
-                labels: positions,
+                labels: labels,
                 datasets: [
                     {
-                        label: "Stops Count",
-                        backgroundColor: "#48ff00",
-                        borderColor: "#70ffb4",
+                        label: "Paradas",
+                        backgroundColor: "#ffc312",
+                        borderColor: "#EE5A24",
                         data: data,
                     },
                 ],
