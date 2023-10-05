@@ -12,6 +12,13 @@ const selectElement = document.querySelector("#destino");
 let positions = ["0%", "20%", "40%", "60%", "80%", "100%",];
 const cycle = ["20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "20%"];
 
+
+/*Botones inhabilitados*/
+reset.disabled = true;
+reset.style.cursor = "not-allowed";
+finishCycle.disabled = true;
+finishCycle.style.cursor = "not-allowed"
+
 //PLC variables
 let mem_posizioa;
 let select_auto_man;
@@ -27,6 +34,14 @@ const paradas = [
     {name : "B4", value: undefined},
     {name : "B5", value: undefined},
 ];
+
+let stopCounts = {
+    "20%": 0,
+    "40%": 0,
+    "60%": 0,
+    "80%": 0,
+    "100%": 0,
+};
 
 fetchData().then(() => {
    if (select_auto_man)
@@ -44,6 +59,11 @@ setInterval(() => {
             postData("REARME", false);
         }
         else if (select_auto_man) {
+            finishCycle.disabled = false;
+            finishCycle.style.cursor = "pointer"
+            destino.disabled = true;
+            destino.style.cursor = "not-allowed"
+
             if (pfc === true && mem_posizioa === 0) {
                 train.style.left = positions[1];
                 setTimeout(() => {train.style.left = positions[0];}, 2000);
@@ -54,6 +74,11 @@ setInterval(() => {
                 playNextAnimation(cycle, mem_posizioa);
             }
         } else if (!select_auto_man) {
+            reset.disabled = true;
+            reset.style.cursor = "not-allowed";
+            finishCycle.disabled = true;
+            finishCycle.style.cursor = "not-allowed"
+
             if (pm) {
                 train.style.transition = "all 1000ms";
                 for (let i = 0; i < paradas.length; i++) {
@@ -66,8 +91,7 @@ setInterval(() => {
     }).catch(error => {console.log("Fetch error: " + error)})
 
 }, 500);
-/*
-Funcion para incrementar el contador de paradas
+
 function incrementStopCount(location) {
     stopCounts[location]++;
     localStorage.setItem("stopCounts", JSON.stringify(stopCounts));
@@ -93,7 +117,7 @@ function updateStopCountDisplay() {
     }
 }
 
-*/
+
 
 /*Boton start*/
 start.addEventListener("click", () => {
@@ -101,7 +125,12 @@ start.addEventListener("click", () => {
         postData("PM", true);
         postData("SETA", false);
         postData("REARME", false);
-        //TODO hay que activar alguna variable para que el tren se mueva de manera automática?
+        start.disabled = true;
+        start.style.cursor = "not-allowed"
+        reset.disabled = true;
+        reset.style.cursor = "not-allowed"
+        finishCycle.disabled = false;
+        finishCycle.style.cursor = "pointer"
     } else {
         let parameters = [];
         postData("PM", true)
@@ -125,13 +154,21 @@ reset.addEventListener("click", () => {
 stopButton.addEventListener("click", () => {
     postData("SETA", true)
     postData("PM", false);
+    start.disabled = false;
+    start.style.cursor = "pointer"
+    reset.disabled = false;
+    reset.style.cursor = "pointer"
+    finishCycle.disabled = true;
+    finishCycle.style.cursor = "not-allowed"
 });
 
 finishCycle.addEventListener("click", () => {
-    if (!seta)
+    if (!seta){
         postData("PFC", true);
+        reset.disabled = true;
+        reset.style.cursor = "not-allowed"
+    }
 });
-
 
 mode.addEventListener("change", () => {
     if (mode.checked) {
@@ -319,6 +356,7 @@ function playNextAnimation(array, index) {
     train.style.transition = "all 1000ms";
     train.style.left = array[index];
     destino.selectedIndex = positions.indexOf(array[index]);
+    incrementStopCount(location);
 
     luz.classList.add("changeColor");
     setTimeout(() => {luz.classList.toggle("changeColor");}, 4900);
