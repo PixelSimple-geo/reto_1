@@ -6,7 +6,7 @@ const train = document.querySelector(".train");
 const finishCycle = document.querySelector(".terminarCiclo");
 const mode = document.querySelector("#trainMode");
 const luz = document.querySelector(".puertas");
-train.style.left = positions[selectElement.selectedIndex];
+const selectElement = document.querySelector("#destino");
 
 
 let positions = ["0%", "20%", "40%", "60%", "80%", "100%",];
@@ -15,9 +15,12 @@ const cycle = ["20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "20%"];
 //PLC variables
 let mem_posizioa;
 let select_auto_man;
+let pm;
 let seta;
 let rearme;
+let pfc;
 const paradas = [
+    {name : "B0", value: undefined},
     {name : "B1", value: undefined},
     {name : "B2", value: undefined},
     {name : "B3", value: undefined},
@@ -25,21 +28,35 @@ const paradas = [
     {name : "B5", value: undefined},
 ];
 
+fetchData().then(() => {
+   if (select_auto_man)
+       mode.checked = true;
+   else
+       mode.checked = false;
+});
+
 setInterval(() => {
     fetchData().then(()=> {
         if (seta && rearme) {
             train.style.transition = "all 2000ms";
             train.style.left = positions[0];
+            postData("SETA", false);
+            postData("REARME", false);
         }
         else if (select_auto_man) {
-            train.style.transition = "all 1000ms";
-            playNextAnimation(cycle, mem_posizioa);
-
+            if (pfc === true && mem_posizioa === 0) {
+                setTimeout(() => {train.style.left = positions[0];}, 2000);
+                postData("PFC", false);
+                postData("PM", false);
+            } else if (pm) {
+                train.style.transition = "all 1000ms";
+                playNextAnimation(cycle, mem_posizioa);
+            }
         } else if (!select_auto_man) {
             train.style.transition = "all 1000ms";
             for (let i = 0; i < paradas.length; i++) {
                 if (paradas[i].value === true)
-                    train.style.left = positions[i] + 1;
+                    train.style.left = positions[i];
             }
 
         }
@@ -49,23 +66,28 @@ setInterval(() => {
 
 start.addEventListener("click", () => {
     if (mode.checked) {
-        postData("SELEk_AUTO/MAN", true);
+        postData("PM", true);
+        postData("SETA", false);
+        postData("REARME", false);
         //TODO hay que activar alguna variable para que el tren se mueva de manera automática?
     } else {
-        postData("SELEk_AUTO/MAN", false);
+        let parameters = [];
+        postData("PM", true)
         postData("SETA", false);
         postData("REARME", false);
         for(let i = 0; i < paradas.length; i++) {
-            if (i !== (selectElement.selectedIndex - 1))
+            if (i !== selectElement.selectedIndex)
                 paradas[i].value = false;
         }
-        paradas[selectElement.selectedIndex - 1].value = true;
+        paradas[selectElement.selectedIndex].value = true;
         postParadas();
     }
 });
 
-reset.addEventListener("click", () =>{
-    postData("REARME",true);
+reset.addEventListener("click", () => {
+    if (seta === true) {
+        postData("REARME", true);
+    }
 });
 
 stopButton.addEventListener("click", () => {
@@ -73,21 +95,25 @@ stopButton.addEventListener("click", () => {
 });
 
 finishCycle.addEventListener("click", () => {
-    //TODO que variable corresponde a terminateCycle?
+    postData("PFC", true);
 });
 
+
+mode.addEventListener("change", () => {
+    if (mode.checked) {
+        postData("SELEK_AUTO/MAN", true);
+        postData("PM", false);
+    } else {
+        postData("SELEK_AUTO/MAN", false)
+        postData("PM", false);
+        train.style.left = positions[0];
+    }
+});
 
 
 
 /*Deshabilitar destino o ciclo*/
 const destino = document.getElementById("destino");
-mode.addEventListener("change", () => {
-    if (mode.checked) {
-
-    } else {
-
-    }
-});
 
 /*
 // Obtén referencias a los botones de parada
@@ -227,11 +253,13 @@ async function fetchData() {
             select_auto_man = returnValueAsBoolean(div.querySelector("#SELEK_AUTO_MAN").textContent);
             seta = returnValueAsBoolean(div.querySelector("#SETA").textContent);
             rearme = returnValueAsBoolean(div.querySelector("#REARME").textContent);
-            paradas[0].value = returnValueAsBoolean(div.querySelector("#B1").textContent);
-            paradas[1].value = returnValueAsBoolean(div.querySelector("#B2").textContent);
-            paradas[2].value = returnValueAsBoolean(div.querySelector("#B3").textContent);
-            paradas[3].value = returnValueAsBoolean(div.querySelector("#B4").textContent);
-            paradas[4].value = returnValueAsBoolean(div.querySelector("#B5").textContent);
+            paradas[1].value = returnValueAsBoolean(div.querySelector("#B1").textContent);
+            paradas[2].value = returnValueAsBoolean(div.querySelector("#B2").textContent);
+            paradas[3].value = returnValueAsBoolean(div.querySelector("#B3").textContent);
+            paradas[4].value = returnValueAsBoolean(div.querySelector("#B4").textContent);
+            paradas[5].value = returnValueAsBoolean(div.querySelector("#B5").textContent);
+            pfc = returnValueAsBoolean(div.querySelector("#PFC").textContent);
+            pm = returnValueAsBoolean(div.querySelector("#PM").textContent);
         }
     };
     xhr.send();
