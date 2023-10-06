@@ -10,7 +10,7 @@ const selectElement = document.querySelector("#destino");
 
 
 let positions = ["0%", "20%", "40%", "60%", "80%", "100%",];
-const cycle = ["20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "20%"];
+const cycle = ["0%", "20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "20%"];
 
 
 /*Botones inhabilitados*/
@@ -19,8 +19,7 @@ reset.disabled = true;
 reset.style.cursor = "not-allowed";
 finishCycle.disabled = true;
 finishCycle.style.cursor = "not-allowed"
-
- */
+*/
 
 //PLC variables
 let mem_posizioa;
@@ -29,6 +28,7 @@ let pm;
 let seta;
 let rearme;
 let pfc;
+let busqueda0;
 const paradas = [
     {name : "B0", value: undefined},
     {name : "B1", value: undefined},
@@ -80,18 +80,15 @@ setInterval(() => {
             }
         } else if (!select_auto_man) {
             /*
-             reset.disabled = true;
+            reset.disabled = true;
             reset.style.cursor = "not-allowed";
             finishCycle.disabled = true;
             finishCycle.style.cursor = "not-allowed"
              */
-
             if (pm) {
                 train.style.transition = "all 1000ms";
-                for (let i = 0; i < paradas.length; i++) {
-                    if (paradas[i].value === true)
-                        train.style.left = positions[i];
-                }
+                train.style.left = cycle[mem_posizioa];
+                postData("PM", false);
             }
 
         }
@@ -139,12 +136,7 @@ start.addEventListener("click", () => {
         postData("PM", true)
         postData("SETA", false);
         postData("REARME", false);
-        for(let i = 0; i < paradas.length; i++) {
-            if (i !== selectElement.selectedIndex)
-                paradas[i].value = false;
-        }
-        paradas[selectElement.selectedIndex].value = true;
-        postParadas();
+        postData("MEM_POSIZIOA", selectElement.selectedIndex);
     }
 });
 
@@ -190,10 +182,11 @@ mode.addEventListener("change", () => {
         finishCycle.disabled = false;
         finishCycle.style.cursor = "pointer";
          */
-        for (let i = 0; i < paradas.length; i++) {
-            paradas[i].value = false
-        }
-        postParadas();
+        mem_posizioa = 0;
+        train.style.left = 0;
+        postData("MEM_POSIZIOA", 0);
+
+
     } else {
         postData("SELEK_AUTO/MAN", false)
         postData("PM", false);
@@ -203,11 +196,12 @@ mode.addEventListener("change", () => {
         finishCycle.style.cursor = "not-allowed";
         destino.disabled = false;
         destino.style.cursor = "pointer";
+
          */
-        for (let i = 0; i < paradas.length; i++) {
-            paradas[i].value = false
-        }
-        postParadas();
+        mem_posizioa = 0;
+        train.style.left = 0;
+        postData("MEM_POSIZIOA", 0);
+
     }
 });
 
@@ -216,7 +210,6 @@ mode.addEventListener("change", () => {
 /*Deshabilitar destino o ciclo*/
 const destino = document.getElementById("destino");
 
-
 // Obtén referencias a los botones de parada
 const parada1 = document.querySelector("#parada1");
 const parada2 = document.querySelector("#parada2");
@@ -224,49 +217,28 @@ const parada3 = document.querySelector("#parada3");
 const parada4 = document.querySelector("#parada4");
 const parada5 = document.querySelector("#parada5");
 
-/*
+
 // Agrega controladores de eventos de clic para los botones de parada
 parada1.addEventListener("click", () => {
-    for(let i = 0; i < paradas.length; i++) {
-        paradas[i].value = false;
-    }
-    paradas[1].value = true;
-    postParadas();
+    selectElement.selectedIndex = 1;
 });
 
 parada2.addEventListener("click", () => {
-    for(let i = 0; i < paradas.length; i++) {
-        paradas[i].value = false;
-    }
-    paradas[2].value = true;
-    postParadas();
+    selectElement.selectedIndex = 2;
 });
 
 parada3.addEventListener("click", () => {
-    for(let i = 0; i < paradas.length; i++) {
-        paradas[i].value = false;
-    }
-    paradas[3].value = true;
-    postParadas();
+    selectElement.selectedIndex = 3;
 });
 
 parada4.addEventListener("click", () => {
-    for(let i = 0; i < paradas.length; i++) {
-        paradas[i] = false;
-    }
-    paradas[4].value = true;
-    postParadas();
+    selectElement.selectedIndex = 4;
 });
 
 parada5.addEventListener("click", () => {
-    for(let i = 0; i < paradas.length; i++) {
-        paradas[i].value = false;
-    }
-    paradas[5].value = true;
-    postParadas();
+    selectElement.selectedIndex = 5
 });
 
- */
 
 
 /*
@@ -297,7 +269,7 @@ function postData(variableName, value) {
 
 function postData(variableName, value) {
     const xhr = new XMLHttpRequest();
-    const url = "index.html";
+    const url = "html/index.html";
 
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -316,34 +288,10 @@ function postData(variableName, value) {
     xhr.send(data);
 }
 
-function postParadas() {
-    const xhr = new XMLHttpRequest();
-    const url = "index.html";
-
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                console.log("Request successful");
-            } else {
-                console.error("Network response was not ok");
-            }
-        }
-    };
-    const data = new URLSearchParams();
-    for (let i = 0; i < paradas.length; i++) {
-        data.append('"mis_datos".'+paradas[i].name.toUpperCase(), paradas[i].value);
-    }
-
-    xhr.send(data);
-}
-
 async function fetchData() {
     console.log("making request")
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", "output_variables.html", true);
+    xhr.open("GET", "html/output_variables.html", true);
     xhr.setRequestHeader("Cache-Control", "no-store");
 
     xhr.onreadystatechange = function () {
@@ -351,7 +299,7 @@ async function fetchData() {
             let div = document.createElement("div");
             div.innerHTML = xhr.responseText;
 
-            mem_posizioa = parseInt(div.querySelector("#MEM_POSIZIOA").textContent) - 1;
+            mem_posizioa = parseInt(div.querySelector("#MEM_POSIZIOA").textContent);
             select_auto_man = returnValueAsBoolean(div.querySelector("#SELEK_AUTO_MAN").textContent);
             seta = returnValueAsBoolean(div.querySelector("#SETA").textContent);
             rearme = returnValueAsBoolean(div.querySelector("#REARME").textContent);
@@ -362,6 +310,7 @@ async function fetchData() {
             paradas[5].value = returnValueAsBoolean(div.querySelector("#B5").textContent);
             pfc = returnValueAsBoolean(div.querySelector("#PFC").textContent);
             pm = returnValueAsBoolean(div.querySelector("#PM").textContent);
+            busqueda0 = returnValueAsBoolean(div.querySelector("#BUSQUEDA").textContent);
         }
     };
     xhr.send();
