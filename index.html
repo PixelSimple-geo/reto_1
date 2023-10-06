@@ -7,6 +7,8 @@
     <!-- AWP_In_Variable Name='"mis_datos".PM' -->
     <!-- AWP_In_Variable Name='"mis_datos".PFC' -->
     <!-- AWP_In_Variable Name='"mis_datos".BUSQUEDA_0' -->
+    <!-- AWP_In_Variable Name='"mis_datos".H1_VERDE' -->
+    <!-- AWP_In_Variable Name='"mis_datos".H2_ROJO' -->
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
@@ -26,7 +28,7 @@
     <nav>
         <ul>
             <li><a href="index.html">Tranvía</a></li>
-            <li><a href="html/manGraph.html">Manúal y Stats</a></li>
+            <li><a href="html/manGraph.html">Manual y Estadísticas</a></li>
         </ul>
     </nav>
 </header>
@@ -43,7 +45,7 @@
         </div>
     </div>
     <div class="controllers">
-        <div class="puertas"></div>
+        <div class="puertas changeColor-animation"></div>
 
         <div class="container-toggle">
             <p class="manaut">Manual</p>
@@ -55,9 +57,9 @@
         </div>
 
         <div class="botones-container">
-            <button type="button" id="start">Start</button>
-            <button type="button" id="stop">Stop</button>
-            <button type="button" id="reset">Reset</button>
+            <button type="button" id="start">Iniciar</button>
+            <button type="button" id="stop">Parar</button>
+            <button type="button" id="reset">Resetear</button>
         </div>
         <div class="destino-wrapper">
             <label for="destino">Destino: </label>
@@ -82,12 +84,20 @@
         <li><a href="#">Telefono</a></li>
     </ul>
 </footer>
-<dialog>
+<dialog class="dialog-busqueda">
     <div class="dialog-container">
         <p>Hacer búsqueda de origen</p>
         <div>
             <button type="button" id="accept">Aceptar</button>
             <button type="button" id="cancel">Cancelar</button>
+        </div>
+    </div>
+</dialog>
+<dialog class="dialog-error">
+    <div class="dialog-error-container">
+        <p class="message"></p>
+        <div>
+            <button type="button" class="dialog-error-accept">Aceptar</button>
         </div>
     </div>
 </dialog>

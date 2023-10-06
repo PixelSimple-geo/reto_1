@@ -1,27 +1,19 @@
 "use strict";
-const start = document.querySelector("#start");
-const stopButton = document.querySelector("#stop");
-const reset = document.querySelector("#reset");
+// Html elements variables
+const buttonStart = document.querySelector("#start");
+const buttonStop = document.querySelector("#stop");
+const buttonReset = document.querySelector("#reset");
+const buttonFinishCycle = document.querySelector(".terminarCiclo");
+const checkBoxAutoMan = document.querySelector("#trainMode");
+const destinationList = document.querySelector("#destino");
 const train = document.querySelector(".train");
-const finishCycle = document.querySelector(".terminarCiclo");
-const mode = document.querySelector("#trainMode");
-const luz = document.querySelector(".puertas");
-const selectElement = document.querySelector("#destino");
-const dialog = document.querySelector("dialog");
+const light = document.querySelector(".puertas");
+const dialog = document.querySelector(".dialog-busqueda");
+const dialogError = document.querySelector(".dialog-error");
 
-let positionTemp;
-
-
-
+// Animation variables
 let positions = ["0%", "20%", "40%", "60%", "80%", "100%",];
 const cycle = ["0%", "20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "20%"];
-
-
-/*Botones inhabilitados*/
-reset.disabled = true;
-reset.style.cursor = "not-allowed";
-finishCycle.disabled = true;
-finishCycle.style.cursor = "not-allowed"
 
 //PLC variables
 let mem_posizioa;
@@ -31,7 +23,10 @@ let seta;
 let rearme;
 let pfc;
 let busqueda0;
+let h1;
+let h2;
 
+// Statistics variables
 let stopCounts = {
     "20%": 0,
     "40%": 0,
@@ -39,54 +34,27 @@ let stopCounts = {
     "80%": 0,
     "100%": 0,
 };
+let positionTemp;
 
-setInterval(() => {
-    fetchData().then(()=> {
-        if (select_auto_man) {
-            mode.checked = true;
-        } else {
-            mode.checked = false;
-        }
-        if (seta && rearme) {
-            train.style.transition = "all 2000ms";
-            train.style.left = positions[0];
-            postData("SETA", false);
-            postData("REARME", false);
-        }
-        else if (select_auto_man) {
+// ----------Functions start----------
 
-            if (pfc === true && mem_posizioa === 1) {
-                train.style.left = positions[1];
-                setTimeout(() => {train.style.left = positions[0];}, 2000);
-                postData("PFC", false);
-                postData("PM", false);
-            } else if (pm) {
-                train.style.transition = "all 1000ms";
-                playNextAnimation(cycle, mem_posizioa);
-            } else {
-                train.style.transition = "all 1000ms";
-                train.style.left = cycle[mem_posizioa];
-            }
-        } else if (!select_auto_man) {
-            if (pm) {
-                train.style.transition = "all 1000ms";
-                playNextAnimation(cycle, mem_posizioa);
-                postData("PM", false);
-            } else {
-                train.style.transition = "all 1000ms";
-                train.style.left = cycle[mem_posizioa];
-            }
+function setButtonsState(startState, stopState, resetState,
+                       finishCycleState) {
+    const pointerOn = "pointer";
+    const pointerOff = "not-allowed";
 
-        }
+    buttonStart.disabled = startState;
+    startState ? buttonStart.style.cursor = pointerOff : buttonStart.style.cursor = pointerOn;
 
-        if (mem_posizioa === 0) {
-            postData("BUSQUEDA_0", false);
-        }
+    buttonStop.disabled = stopState;
+    stopState ? buttonStop.style.cursor = pointerOff : buttonStop.style.cursor = pointerOn;
 
-        incrementStopCount(cycle[mem_posizioa]);
-    }).catch(error => {console.log("Fetch error: " + error)})
+    buttonReset.disabled = resetState;
+    resetState ? buttonReset.style.cursor = pointerOff : buttonReset.style.cursor = pointerOn;
 
-}, 500);
+    buttonFinishCycle.disabled = finishCycleState;
+    finishCycleState ? buttonFinishCycle.style.cursor = pointerOff : buttonFinishCycle.style.cursor = pointerOn;
+}
 
 function incrementStopCount(location) {
     if (positionTemp != undefined && location !== positionTemp && mem_posizioa !== 0) {
@@ -97,15 +65,6 @@ function incrementStopCount(location) {
     positionTemp = location;
 }
 
-// Initialize stop counts on page load
-window.onload = function () {
-    if (localStorage.getItem("stopCounts")) {
-        stopCounts = JSON.parse(localStorage.getItem("stopCounts"));
-        updateStopCountDisplay();
-    }
-};
-
-// Function to update the stop count display
 function updateStopCountDisplay() {
     for (const location in stopCounts) {
         const count = stopCounts[location];
@@ -116,185 +75,59 @@ function updateStopCountDisplay() {
     }
 }
 
-
-
-/*Boton start*/
-start.addEventListener("click", () => {
-    if (mode.checked) {
-        postData("PM", true);
-        postData("SETA", false);
-        postData("REARME", false);
-
-        //Funcionalidades botones
-        start.disabled = true;
-        start.style.cursor = "not-allowed"
-    } else {
-        let parameters = [];
-        postData("PM", true)
-        postData("SETA", false);
-        postData("REARME", false);
-        postData("MEM_POSIZIOA", selectElement.selectedIndex);
-    }
-});
-
-reset.addEventListener("click", () => {
-    if (seta === true) {
-        postData("REARME", true);
-        postData("MEM_POSIZIOA", 0)
-    }
-
-    //Funcionalidades botones
-    reset.disabled = true;
-    reset.style.cursor = "not-allowed"
-    finishCycle.disabled = false;
-    finishCycle.style.cursor = "pointer"
-});
-
-stopButton.addEventListener("click", () => {
-    postData("SETA", true)
-    postData("PM", false);
-
-    //Funcionalidades botones
-    start.disabled = false;
-    start.style.cursor = "pointer"
-    reset.disabled = false;
-    reset.style.cursor = "pointer"
-    finishCycle.disabled = true;
-    finishCycle.style.cursor = "not-allowed"
-});
-
-finishCycle.addEventListener("click", () => {
-    if (!seta){
-        postData("PFC", true);
-    }
-
-    //Funcionalidades botones
-    start.disabled = true;
-    start.style.cursor = "not-allowed"
-});
-
-mode.addEventListener("change", () => {
-    if (mode.checked) {
-        postData("SELEK_AUTO/MAN", true);
-        postData("PM", false);
-        //Funcionalidades botones
-        start.disabled = false;
-        start.style.cursor = "pointer"
-        reset.disabled = true;
-        reset.style.cursor = "not-allowed"
-        finishCycle.disabled = false;
-        finishCycle.style.cursor = "pointer";
-        destino.disabled = true;
-        destino.style.cursor = "not-allowed";
-        postData("MEM_POSIZIOA", 0);
-
-
-    } else {
-        postData("SELEK_AUTO/MAN", false)
-        postData("PM", false);
-        //Funcionalidades botones
-        start.disabled = false;
-        start.style.cursor = "pointer"
-        finishCycle.disabled = true;
-        finishCycle.style.cursor = "not-allowed";
-        destino.disabled = false;
-        destino.style.cursor = "pointer";
-        postData("MEM_POSIZIOA", 0);
-
-    }
-});
-
-
-
-/*Deshabilitar destino o ciclo*/
-const destino = document.getElementById("destino");
-
-// Obtén referencias a los botones de parada
-const parada1 = document.querySelector("#parada1");
-const parada2 = document.querySelector("#parada2");
-const parada3 = document.querySelector("#parada3");
-const parada4 = document.querySelector("#parada4");
-const parada5 = document.querySelector("#parada5");
-
-
-// Agrega controladores de eventos de clic para los botones de parada
-parada1.addEventListener("click", () => {
-    selectElement.selectedIndex = 1;
-});
-
-parada2.addEventListener("click", () => {
-    selectElement.selectedIndex = 2;
-});
-
-parada3.addEventListener("click", () => {
-    selectElement.selectedIndex = 3;
-});
-
-parada4.addEventListener("click", () => {
-    selectElement.selectedIndex = 4;
-});
-
-parada5.addEventListener("click", () => {
-    selectElement.selectedIndex = 5
-});
-
-
-
 /*
-El plc no soporta fetch
 function postData(variableName, value) {
+    const url = "index.html";
     const data = new URLSearchParams();
-    data.append('"mis_datos".'+variableName, value);
+    data.append('"mis_datos".'+ variableName.toUpperCase(), value);
 
-    fetch("index.html", {
-        method: 'POST',
+    fetch(url, {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: data,
+        body: data
     })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+        .then(response => {
+            if (response.ok) {
+                console.log("Post was successful");
+            } else {
+                console.error("Failed to update");
             }
-            return response.text();
         })
-        .catch((error) => {
-            console.error('Fetch Error:', error);
-
+        .catch(error => {
+            console.error("Error:", error);
         });
 }
-*/
+ */
 
-function postData(variableName, value) {
+function postData(...parameters) {
     const xhr = new XMLHttpRequest();
-    const url = "html/index.html";
 
-    xhr.open("POST", url, true);
+    xhr.open("POST", "index.html", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                console.log("Request successful");
-            } else {
-                console.error("Network response was not ok");
+            if (xhr.status > 300) {
+                showErrorDialog(`Error al intentar actualizar: ${parameters.toString()}`);
             }
         }
     };
+
     const data = new URLSearchParams();
-    data.append('"mis_datos".'+variableName.toUpperCase(), value);
+    for(let i = 0; i < parameters.length; i++)
+        data.append('"mis_datos".' + parameters[i][0].toUpperCase(), parameters[i][1]);
     xhr.send(data);
 }
 
-async function fetchData() {
-    console.log("making request")
-    let xhr = new XMLHttpRequest();
-    xhr.open("GET", "html/output_variables.html", true);
-    xhr.setRequestHeader("Cache-Control", "no-store");
 
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
+async function getData() {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "html/output_variables.html", true);
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
             let div = document.createElement("div");
             div.innerHTML = xhr.responseText;
 
@@ -305,7 +138,15 @@ async function fetchData() {
             pfc = returnValueAsBoolean(div.querySelector("#PFC").textContent);
             pm = returnValueAsBoolean(div.querySelector("#PM").textContent);
             busqueda0 = returnValueAsBoolean(div.querySelector("#BUSQUEDA").textContent);
+            h1 = returnValueAsBoolean(div.querySelector("#H1").textContent);
+            h2 = returnValueAsBoolean(div.querySelector("#H2").textContent);
+
+
         }
+    };
+
+    xhr.onerror = function () {
+        showErrorDialog("Hubo un error al intentar comunicar con el plc.");
     };
     xhr.send();
 }
@@ -313,32 +154,136 @@ async function fetchData() {
 function returnValueAsBoolean(value) {
     value = parseInt(value);
     return value === 1;
-
 }
 
 function playNextAnimation(array, index) {
     train.style.transition = "all 1000ms";
     train.style.left = array[index];
-    destino.selectedIndex = positions.indexOf(array[index]);
-    turnLightOn();
+//  turnLightOn();
 }
 
-function turnLightOn() {
-    luz.classList.add("changeColor");
-    setTimeout(() => {luz.classList.toggle("changeColor");}, 4900);
+function turnLightOn(isOn) {
+    if (isOn) {
+        light.classList.remove("changeColor-red");
+        light.classList.add("changeColor-green");
+    } else {
+        light.classList.remove("changeColor-green");
+        light.classList.add("changeColor-red");
+    }
 }
 
+function showErrorDialog(message) {
+    let p = document.querySelector(".dialog-error .message");
+    p.textContent = message;
+    dialogError.showModal();
+}
+
+// ----------Functions end----------
+
+window.onload = function () {
+    if (localStorage.getItem("stopCounts")) {
+        stopCounts = JSON.parse(localStorage.getItem("stopCounts"));
+        updateStopCountDisplay();
+    }
+};
+
+setInterval(() => {
+    getData().then(()=> {
+        turnLightOn(h1);
+        checkBoxAutoMan.checked = select_auto_man;
+        incrementStopCount(cycle[mem_posizioa]);
+
+        if (seta) { // State: train is stopped
+            setButtonsState(false, true,false, true);
+            if (rearme) { // State: train is returning to its origin
+                setButtonsState(true, true, true,true);
+                train.style.transition = "all 2000ms";
+                train.style.left = positions[0];
+                postData(["SETA", false], ["REARME", false]);
+            }
+        } else if (select_auto_man) { // State: train is on automatic mode
+            if (pm) { // State: train is running
+                setButtonsState(true,false,true, false);
+                if (pfc === true && mem_posizioa === 1) {
+                    train.style.left = cycle[1];
+                    setTimeout(() => {
+                        train.style.left = positions[0];
+                        postData(["PFC", false], ["PM", false], ["MEM_POSIZIOA", 0]);
+                    }, 2000);
+                } else {
+                    train.style.transition = "all 1000ms";
+                    playNextAnimation(cycle, mem_posizioa);
+                }
+            } else { // State: train is not running
+                setButtonsState(false,true,true,true);
+                train.style.transition = "all 1000ms";
+                train.style.left = cycle[0];
+            }
+        } else { // State: train is on manual mode
+            setButtonsState(false,true,true,true);
+            train.style.transition = "all 1000ms";
+            playNextAnimation(cycle, mem_posizioa);
+            if (pm) {
+                postData(["PM", false]);
+            }
+
+        }
+
+        if (mem_posizioa === 0 && busqueda0) postData(["BUSQUEDA_0", false]);
+
+    }).catch(error => {showErrorDialog("Fetch error: " + error)})
+
+}, 500);
+
+buttonStart.addEventListener("click", () => {
+    if (checkBoxAutoMan.checked) {
+        postData(["PM", true], ["SETA", false], ["REARME", false]);
+    } else {
+        postData(["PM", true], ["SETA", false], ["REARME", false], ["MEM_POSIZIOA", destinationList.selectedIndex]);
+    }
+});
+
+buttonReset.addEventListener("click", () => {
+    if (seta === true) {
+        postData(["REARME", true], ["MEM_POSIZIOA", 0]);
+    }
+});
+
+buttonStop.addEventListener("click", () => {
+    postData(["SETA", true], ["PM", false]);
+});
+
+buttonFinishCycle.addEventListener("click", () => {
+    if (!seta){
+        postData(["PFC", true]);
+    }
+});
+
+checkBoxAutoMan.addEventListener("change", () => {
+    if (checkBoxAutoMan.checked) {
+        postData(["SELEK_AUTO/MAN", true], ["PM", false], ["MEM_POSIZIOA", 0]);
+    } else {
+        postData(["SELEK_AUTO/MAN", false], ["PM", false], ["MEM_POSIZIOA", 0]);
+    }
+});
+
+document.querySelectorAll(".line button").forEach((element, index) => {
+    element.addEventListener("click", () => {
+        destinationList.selectedIndex = index;
+    });
+});
 
 // Dialog
-const dialogAccept = document.getElementById("accept");
-const dialogCancel = document.getElementById("cancel");
-
-dialogAccept.addEventListener("click", () => {
+document.getElementById("accept").addEventListener("click", () => {
     postData("BUSQUEDA_0", true);
     postData("PM", true);
     dialog.close();
 });
 
-dialogCancel.addEventListener("click", () => {
+document.getElementById("cancel").addEventListener("click", () => {
    dialog.close();
+});
+
+document.querySelector(".dialog-error-accept").addEventListener("click", () => {
+   dialogError.close();
 });

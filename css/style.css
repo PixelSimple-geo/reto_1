@@ -10,6 +10,7 @@
     --step-5: clamp(2.80rem, 1.03rem + 8.86vw, 7.89rem);
 
     --bgColor: white;
+    --bg-accent: rgba(211, 211, 211, 0.9);
     --borderColor: #d2d3d7;
 
     --train-start: 0%;
@@ -186,6 +187,11 @@ main {
     background-color: black;
     color: white;
 }
+
+.controllers button[disabled] {
+    background-color: var(--bg-accent);
+}
+
 .destino-wrapper {
     height: 100%;
 }
@@ -277,34 +283,26 @@ select{
     box-shadow: 0 0 10px 1px red;
 }
 
-.changeColor {
+.changeColor-animation {
     animation-delay: 0s;
-    animation-duration: 5s;
+    animation-duration: 1s;
     animation-iteration-count: 1;
     animation-timing-function: linear;
-    animation-fill-mode: both;
-    animation-name: changeColor;
+    animation-fill-mode: forwards;
 }
 
-@keyframes changeColor {
-     0% {
-         background-color: red;
-         box-shadow: 0 0 10px 1px red;
-     }
+.changeColor-green {
+    animation-name: lightOn;
+}
 
-    25% {
-        background-color: orange;
-        box-shadow: 0 0 10px 1px orange;
-    }
+.changeColor-red {
+    animation-name: lightOff;
+}
 
-     50% {
-         background-color: green;
-         box-shadow: 0 0 10px 1px green;
-     }
-
-    75% {
-        background-color: orange;
-        box-shadow: 0 0 10px 1px orange;
+@keyframes lightOff {
+    0% {
+        background-color: green;
+        box-shadow: 0 0 10px 1px green;
     }
 
      100% {
@@ -312,6 +310,18 @@ select{
          box-shadow: 0 0 10px 1px red;
      }
  }
+
+@keyframes lightOn {
+    0% {
+        background-color: red;
+        box-shadow: 0 0 10px 1px red;
+    }
+
+    100% {
+        background-color: green;
+        box-shadow: 0 0 10px 1px green;
+    }
+}
 
 /*Footer*/
 footer{
