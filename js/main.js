@@ -14,12 +14,10 @@ const cycle = ["0%", "20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "2
 
 
 /*Botones inhabilitados*/
-/*
 reset.disabled = true;
 reset.style.cursor = "not-allowed";
 finishCycle.disabled = true;
 finishCycle.style.cursor = "not-allowed"
-*/
 
 //PLC variables
 let mem_posizioa;
@@ -62,12 +60,6 @@ setInterval(() => {
             postData("REARME", false);
         }
         else if (select_auto_man) {
-            /*
-            finishCycle.disabled = false;
-            finishCycle.style.cursor = "pointer"
-            destino.disabled = true;
-            destino.style.cursor = "not-allowed"
-             */
 
             if (pfc === true && mem_posizioa === 1) {
                 train.style.left = positions[1];
@@ -79,12 +71,6 @@ setInterval(() => {
                 playNextAnimation(cycle, mem_posizioa);
             }
         } else if (!select_auto_man) {
-            /*
-            reset.disabled = true;
-            reset.style.cursor = "not-allowed";
-            finishCycle.disabled = true;
-            finishCycle.style.cursor = "not-allowed"
-             */
             if (pm) {
                 train.style.transition = "all 1000ms";
                 train.style.left = cycle[mem_posizioa];
@@ -130,7 +116,9 @@ start.addEventListener("click", () => {
         postData("SETA", false);
         postData("REARME", false);
 
-
+        //Funcionalidades botones
+        start.disabled = true;
+        start.style.cursor = "not-allowed"
     } else {
         let parameters = [];
         postData("PM", true)
@@ -144,29 +132,35 @@ reset.addEventListener("click", () => {
     if (seta === true) {
         postData("REARME", true);
     }
+
+    //Funcionalidades botones
+    reset.disabled = true;
+    reset.style.cursor = "not-allowed"
+    finishCycle.disabled = false;
+    finishCycle.style.cursor = "pointer"
 });
 
 stopButton.addEventListener("click", () => {
     postData("SETA", true)
     postData("PM", false);
-    /*
+
+    //Funcionalidades botones
     start.disabled = false;
     start.style.cursor = "pointer"
     reset.disabled = false;
     reset.style.cursor = "pointer"
     finishCycle.disabled = true;
     finishCycle.style.cursor = "not-allowed"
-     */
 });
 
 finishCycle.addEventListener("click", () => {
     if (!seta){
         postData("PFC", true);
-        /*
-        reset.disabled = true;
-        reset.style.cursor = "not-allowed"
-         */
     }
+
+    //Funcionalidades botones
+    start.disabled = true;
+    start.style.cursor = "not-allowed"
 });
 
 mode.addEventListener("change", () => {
@@ -174,14 +168,17 @@ mode.addEventListener("change", () => {
         postData("SELEK_AUTO/MAN", true);
         postData("PM", false);
         train.style.left = positions[0];
-        /*
-        start.disabled = true;
-        start.style.cursor = "not-allowed"
+
+        //Funcionalidades botones
+        start.disabled = false;
+        start.style.cursor = "pointer"
         reset.disabled = true;
         reset.style.cursor = "not-allowed"
         finishCycle.disabled = false;
         finishCycle.style.cursor = "pointer";
-         */
+        destino.disabled = true;
+        destino.style.cursor = "not-allowed";
+
         mem_posizioa = 0;
         train.style.left = 0;
         postData("MEM_POSIZIOA", 0);
@@ -190,14 +187,16 @@ mode.addEventListener("change", () => {
     } else {
         postData("SELEK_AUTO/MAN", false)
         postData("PM", false);
-        /*
         train.style.left = positions[0];
+
+        //Funcionalidades botones
+        start.disabled = false;
+        start.style.cursor = "pointer"
         finishCycle.disabled = true;
         finishCycle.style.cursor = "not-allowed";
         destino.disabled = false;
         destino.style.cursor = "pointer";
 
-         */
         mem_posizioa = 0;
         train.style.left = 0;
         postData("MEM_POSIZIOA", 0);
