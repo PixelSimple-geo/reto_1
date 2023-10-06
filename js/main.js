@@ -69,7 +69,7 @@ setInterval(() => {
             destino.style.cursor = "not-allowed"
              */
 
-            if (pfc === true && mem_posizioa === 0) {
+            if (pfc === true && mem_posizioa === 1) {
                 train.style.left = positions[1];
                 setTimeout(() => {train.style.left = positions[0];}, 2000);
                 postData("PFC", false);
