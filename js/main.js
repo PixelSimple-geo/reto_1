@@ -9,6 +9,8 @@ const luz = document.querySelector(".puertas");
 const selectElement = document.querySelector("#destino");
 const dialog = document.querySelector("dialog");
 
+let positionTemp;
+
 
 
 let positions = ["0%", "20%", "40%", "60%", "80%", "100%",];
@@ -29,14 +31,6 @@ let seta;
 let rearme;
 let pfc;
 let busqueda0;
-const paradas = [
-    {name : "B0", value: undefined},
-    {name : "B1", value: undefined},
-    {name : "B2", value: undefined},
-    {name : "B3", value: undefined},
-    {name : "B4", value: undefined},
-    {name : "B5", value: undefined},
-];
 
 let stopCounts = {
     "20%": 0,
@@ -45,15 +39,6 @@ let stopCounts = {
     "80%": 0,
     "100%": 0,
 };
-
-fetchData().then(() => {
-   if (select_auto_man)
-       mode.checked = true;
-   else
-       mode.checked = false;
-   if (!busqueda0)
-       dialog.showModal();
-});
 
 setInterval(() => {
     fetchData().then(()=> {
@@ -85,7 +70,7 @@ setInterval(() => {
         } else if (!select_auto_man) {
             if (pm) {
                 train.style.transition = "all 1000ms";
-                train.style.left = cycle[mem_posizioa];
+                playNextAnimation(cycle, mem_posizioa);
                 postData("PM", false);
             } else {
                 train.style.transition = "all 1000ms";
@@ -97,14 +82,19 @@ setInterval(() => {
         if (mem_posizioa === 0) {
             postData("BUSQUEDA_0", false);
         }
+
+        incrementStopCount(cycle[mem_posizioa]);
     }).catch(error => {console.log("Fetch error: " + error)})
 
 }, 500);
 
 function incrementStopCount(location) {
-    stopCounts[location]++;
-    localStorage.setItem("stopCounts", JSON.stringify(stopCounts));
-    updateStopCountDisplay();
+    if (positionTemp != undefined && location !== positionTemp && mem_posizioa !== 0) {
+        stopCounts[location]++;
+        localStorage.setItem("stopCounts", JSON.stringify(stopCounts));
+        updateStopCountDisplay();
+    }
+    positionTemp = location;
 }
 
 // Initialize stop counts on page load
@@ -312,11 +302,6 @@ async function fetchData() {
             select_auto_man = returnValueAsBoolean(div.querySelector("#SELEK_AUTO_MAN").textContent);
             seta = returnValueAsBoolean(div.querySelector("#SETA").textContent);
             rearme = returnValueAsBoolean(div.querySelector("#REARME").textContent);
-            paradas[1].value = returnValueAsBoolean(div.querySelector("#B1").textContent);
-            paradas[2].value = returnValueAsBoolean(div.querySelector("#B2").textContent);
-            paradas[3].value = returnValueAsBoolean(div.querySelector("#B3").textContent);
-            paradas[4].value = returnValueAsBoolean(div.querySelector("#B4").textContent);
-            paradas[5].value = returnValueAsBoolean(div.querySelector("#B5").textContent);
             pfc = returnValueAsBoolean(div.querySelector("#PFC").textContent);
             pm = returnValueAsBoolean(div.querySelector("#PM").textContent);
             busqueda0 = returnValueAsBoolean(div.querySelector("#BUSQUEDA").textContent);
@@ -335,11 +320,12 @@ function playNextAnimation(array, index) {
     train.style.transition = "all 1000ms";
     train.style.left = array[index];
     destino.selectedIndex = positions.indexOf(array[index]);
+    turnLightOn();
+}
 
-    incrementStopCount(array[index]);
-
-    //luz.classList.add("changeColor");
-    //setTimeout(() => {luz.classList.toggle("changeColor");}, 4900);
+function turnLightOn() {
+    luz.classList.add("changeColor");
+    setTimeout(() => {luz.classList.toggle("changeColor");}, 4900);
 }
 
 
