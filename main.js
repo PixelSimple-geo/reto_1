@@ -14,10 +14,13 @@ const cycle = ["20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "20%"];
 
 
 /*Botones inhabilitados*/
+/*
 reset.disabled = true;
 reset.style.cursor = "not-allowed";
 finishCycle.disabled = true;
 finishCycle.style.cursor = "not-allowed"
+
+ */
 
 //PLC variables
 let mem_posizioa;
@@ -59,10 +62,12 @@ setInterval(() => {
             postData("REARME", false);
         }
         else if (select_auto_man) {
+            /*
             finishCycle.disabled = false;
             finishCycle.style.cursor = "pointer"
             destino.disabled = true;
             destino.style.cursor = "not-allowed"
+             */
 
             if (pfc === true && mem_posizioa === 0) {
                 train.style.left = positions[1];
@@ -74,10 +79,12 @@ setInterval(() => {
                 playNextAnimation(cycle, mem_posizioa);
             }
         } else if (!select_auto_man) {
-            reset.disabled = true;
+            /*
+             reset.disabled = true;
             reset.style.cursor = "not-allowed";
             finishCycle.disabled = true;
             finishCycle.style.cursor = "not-allowed"
+             */
 
             if (pm) {
                 train.style.transition = "all 1000ms";
@@ -125,12 +132,8 @@ start.addEventListener("click", () => {
         postData("PM", true);
         postData("SETA", false);
         postData("REARME", false);
-        start.disabled = true;
-        start.style.cursor = "not-allowed"
-        reset.disabled = true;
-        reset.style.cursor = "not-allowed"
-        finishCycle.disabled = false;
-        finishCycle.style.cursor = "pointer"
+
+
     } else {
         let parameters = [];
         postData("PM", true)
@@ -154,19 +157,23 @@ reset.addEventListener("click", () => {
 stopButton.addEventListener("click", () => {
     postData("SETA", true)
     postData("PM", false);
+    /*
     start.disabled = false;
     start.style.cursor = "pointer"
     reset.disabled = false;
     reset.style.cursor = "pointer"
     finishCycle.disabled = true;
     finishCycle.style.cursor = "not-allowed"
+     */
 });
 
 finishCycle.addEventListener("click", () => {
     if (!seta){
         postData("PFC", true);
+        /*
         reset.disabled = true;
         reset.style.cursor = "not-allowed"
+         */
     }
 });
 
@@ -175,6 +182,14 @@ mode.addEventListener("change", () => {
         postData("SELEK_AUTO/MAN", true);
         postData("PM", false);
         train.style.left = positions[0];
+        /*
+        start.disabled = true;
+        start.style.cursor = "not-allowed"
+        reset.disabled = true;
+        reset.style.cursor = "not-allowed"
+        finishCycle.disabled = false;
+        finishCycle.style.cursor = "pointer";
+         */
         for (let i = 0; i < paradas.length; i++) {
             paradas[i].value = false
         }
@@ -182,7 +197,13 @@ mode.addEventListener("change", () => {
     } else {
         postData("SELEK_AUTO/MAN", false)
         postData("PM", false);
+        /*
         train.style.left = positions[0];
+        finishCycle.disabled = true;
+        finishCycle.style.cursor = "not-allowed";
+        destino.disabled = false;
+        destino.style.cursor = "pointer";
+         */
         for (let i = 0; i < paradas.length; i++) {
             paradas[i].value = false
         }
@@ -195,7 +216,7 @@ mode.addEventListener("change", () => {
 /*Deshabilitar destino o ciclo*/
 const destino = document.getElementById("destino");
 
-/*
+
 // Obtén referencias a los botones de parada
 const parada1 = document.querySelector("#parada1");
 const parada2 = document.querySelector("#parada2");
@@ -203,59 +224,58 @@ const parada3 = document.querySelector("#parada3");
 const parada4 = document.querySelector("#parada4");
 const parada5 = document.querySelector("#parada5");
 
+/*
 // Agrega controladores de eventos de clic para los botones de parada
 parada1.addEventListener("click", () => {
     for(let i = 0; i < paradas.length; i++) {
-        if (i !== selectElement.selectedIndex)
-            paradas[i].value = false;
+        paradas[i].value = false;
     }
-    paradas[1] = true;
+    paradas[1].value = true;
     postParadas();
 });
 
 parada2.addEventListener("click", () => {
     for(let i = 0; i < paradas.length; i++) {
-        if (i !== selectElement.selectedIndex)
-            paradas[i].value = false;
+        paradas[i].value = false;
     }
-    paradas[2] = true;
+    paradas[2].value = true;
     postParadas();
 });
 
 parada3.addEventListener("click", () => {
     for(let i = 0; i < paradas.length; i++) {
-        if (i !== selectElement.selectedIndex)
-            paradas[i].value = false;
+        paradas[i].value = false;
     }
-    paradas[3] = true;
+    paradas[3].value = true;
     postParadas();
 });
 
 parada4.addEventListener("click", () => {
     for(let i = 0; i < paradas.length; i++) {
-        if (i !== selectElement.selectedIndex)
-            paradas[i] = false;
+        paradas[i] = false;
     }
-    paradas[4] = true;
+    paradas[4].value = true;
     postParadas();
 });
 
 parada5.addEventListener("click", () => {
     for(let i = 0; i < paradas.length; i++) {
-        if (i !== selectElement.selectedIndex)
-            paradas[i].value = false;
+        paradas[i].value = false;
     }
-    paradas[5] = true;
+    paradas[5].value = true;
     postParadas();
-});*/
+});
+
+ */
 
 
 /*
+El plc no soporta fetch
 function postData(variableName, value) {
     const data = new URLSearchParams();
     data.append('"mis_datos".'+variableName, value);
 
-    fetch("http://10.0.2.100/awp/pruebas/index.html", {
+    fetch("index.html", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -273,11 +293,11 @@ function postData(variableName, value) {
 
         });
 }
- */
+*/
 
 function postData(variableName, value) {
     const xhr = new XMLHttpRequest();
-    const url = "http://10.0.2.100/awp/pruebas/index.html";
+    const url = "index.html";
 
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -298,7 +318,7 @@ function postData(variableName, value) {
 
 function postParadas() {
     const xhr = new XMLHttpRequest();
-    const url = "http://10.0.2.100/awp/pruebas/index.html";
+    const url = "index.html";
 
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -349,9 +369,8 @@ async function fetchData() {
 
 function returnValueAsBoolean(value) {
     value = parseInt(value);
-    if (value === 1)
-        return true;
-    return false;
+    return value === 1;
+
 }
 
 function playNextAnimation(array, index) {
