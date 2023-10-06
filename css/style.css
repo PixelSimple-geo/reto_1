@@ -429,3 +429,15 @@ footer ul {
     }
 }
 
+dialog .dialog-container {
+    display: grid;
+    padding: 2.5em;
+    gap: 0.5rem;
+}
+
+dialog .dialog-container div {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+}
+

@@ -7,6 +7,8 @@ const finishCycle = document.querySelector(".terminarCiclo");
 const mode = document.querySelector("#trainMode");
 const luz = document.querySelector(".puertas");
 const selectElement = document.querySelector("#destino");
+const dialog = document.querySelector("dialog");
+
 
 
 let positions = ["0%", "20%", "40%", "60%", "80%", "100%",];
@@ -51,10 +53,17 @@ fetchData().then(() => {
        mode.checked = true;
    else
        mode.checked = false;
+   if (!busqueda0)
+       dialog.showModal();
 });
 
 setInterval(() => {
     fetchData().then(()=> {
+        if (select_auto_man) {
+            mode.checked = true;
+        } else {
+            mode.checked = false;
+        }
         if (seta && rearme) {
             train.style.transition = "all 2000ms";
             train.style.left = positions[0];
@@ -77,6 +86,9 @@ setInterval(() => {
             } else if (pm) {
                 train.style.transition = "all 1000ms";
                 playNextAnimation(cycle, mem_posizioa);
+            } else {
+                train.style.transition = "all 1000ms";
+                train.style.left = cycle[mem_posizioa];
             }
         } else if (!select_auto_man) {
             /*
@@ -89,8 +101,15 @@ setInterval(() => {
                 train.style.transition = "all 1000ms";
                 train.style.left = cycle[mem_posizioa];
                 postData("PM", false);
+            } else {
+                train.style.transition = "all 1000ms";
+                train.style.left = cycle[mem_posizioa];
             }
 
+        }
+
+        if (mem_posizioa === 0) {
+            postData("BUSQUEDA_0", false);
         }
     }).catch(error => {console.log("Fetch error: " + error)})
 
@@ -143,6 +162,7 @@ start.addEventListener("click", () => {
 reset.addEventListener("click", () => {
     if (seta === true) {
         postData("REARME", true);
+        postData("MEM_POSIZIOA", 0)
     }
 });
 
@@ -173,7 +193,6 @@ mode.addEventListener("change", () => {
     if (mode.checked) {
         postData("SELEK_AUTO/MAN", true);
         postData("PM", false);
-        train.style.left = positions[0];
         /*
         start.disabled = true;
         start.style.cursor = "not-allowed"
@@ -182,8 +201,6 @@ mode.addEventListener("change", () => {
         finishCycle.disabled = false;
         finishCycle.style.cursor = "pointer";
          */
-        mem_posizioa = 0;
-        train.style.left = 0;
         postData("MEM_POSIZIOA", 0);
 
 
@@ -198,8 +215,6 @@ mode.addEventListener("change", () => {
         destino.style.cursor = "pointer";
 
          */
-        mem_posizioa = 0;
-        train.style.left = 0;
         postData("MEM_POSIZIOA", 0);
 
     }
@@ -329,6 +344,21 @@ function playNextAnimation(array, index) {
 
     incrementStopCount(array[index]);
 
-    luz.classList.add("changeColor");
-    setTimeout(() => {luz.classList.toggle("changeColor");}, 4900);
+    //luz.classList.add("changeColor");
+    //setTimeout(() => {luz.classList.toggle("changeColor");}, 4900);
 }
+
+
+// Dialog
+const dialogAccept = document.getElementById("accept");
+const dialogCancel = document.getElementById("cancel");
+
+dialogAccept.addEventListener("click", () => {
+    postData("BUSQUEDA_0", true);
+    postData("PM", true);
+    dialog.close();
+});
+
+dialogCancel.addEventListener("click", () => {
+   dialog.close();
+});
