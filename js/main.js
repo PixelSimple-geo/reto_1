@@ -4,9 +4,10 @@ const buttonStart = document.querySelector("#start");
 const buttonStop = document.querySelector("#stop");
 const buttonReset = document.querySelector("#reset");
 const buttonFinishCycle = document.querySelector(".terminarCiclo");
+const buttonFindOrigin = document.querySelector(".reencontrarse");
 const checkBoxAutoMan = document.querySelector("#trainMode");
 const destinationList = document.querySelector("#destino");
-const train = document.querySelector("#train");
+const train = document.querySelector(".train");
 const light = document.querySelector(".puertas");
 const dialogError = document.querySelector(".dialog-error");
 
@@ -15,19 +16,11 @@ const cycle = ["0%", "20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "2
 
 //PLC variables
 const URI = "html/IO_variables.html";
-let mem_posizioa;
-let select_auto_man;
-let pm;
-let seta;
-let rearme;
-let pfc;
-let busqueda0;
-let h1;
-let h2;
+let mem_posizioa, select_auto_man, pm, seta, rearme, pfc, busqueda0, h1, h2,
+mem_posizioaTemp = -Infinity; // Not a PLC variable. It's for state tracking purposes
 
 // Statistics variables
 let stopCounts = {"20%": 0, "40%": 0, "60%": 0, "80%": 0, "100%": 0};
-let positionTemp;
 
 async function getData() {
     const xhr = new XMLHttpRequest();
@@ -67,42 +60,29 @@ function postData(...parameters) {
     xhr.send(data);
 }
 
-function setButtonsState(buttonStartState, buttonStopState, buttonResetState, buttonFinishCycleState) {
-    const cursorOn = "pointer";
-    const cursorOff = "not-allowed";
-
-    buttonStart.disabled = buttonStartState;
-    buttonStartState ? buttonStart.style.cursor = cursorOff : buttonStart.style.cursor = cursorOn;
-
-    buttonStop.disabled = buttonStopState;
-    buttonStopState ? buttonStop.style.cursor = cursorOff : buttonStop.style.cursor = cursorOn;
-
-    buttonReset.disabled = buttonResetState;
-    buttonResetState ? buttonReset.style.cursor = cursorOff : buttonReset.style.cursor = cursorOn;
-
-    buttonFinishCycle.disabled = buttonFinishCycleState;
-    buttonFinishCycleState ? buttonFinishCycle.style.cursor = cursorOff : buttonFinishCycle.style.cursor = cursorOn;
+function setButtonState(button, isDisabled) {
+    button.disabled = isDisabled;
+    button.style.cursor = isDisabled ? "not-allowed" : "pointer";
 }
 
-function playNextAnimation(value) {
+function setButtonsState(buttonStartState, buttonStopState, buttonResetState, buttonFinishCycleState, buttonFindOriginState = busqueda0) {
+    setButtonState(buttonStart, buttonStartState);
+    setButtonState(buttonStop, buttonStopState);
+    setButtonState(buttonReset, buttonResetState);
+    setButtonState(buttonFinishCycle, buttonFinishCycleState);
+    setButtonState(buttonFindOrigin, buttonFindOriginState);
+}
+
+function playNextAnimation() {
     train.style.transition = "all 1000ms";
-    train.style.left = value;
-    train.classList.add("train-animation")
-    setTimeout(() => train.classList.remove("train-animation"), 1000);
+    train.style.left = cycle[mem_posizioa];
+    train.classList.remove("train-animation-stopped", "train-animation-moving");
+    hasTrainMoved() ? train.classList.add("train-animation-moving") : train.classList.add("train-animation-stopped");
 }
 
-function turnLightOn(h1, h2) {
-    if (h1) {
-        light.classList.remove("changeColor-red");
-        light.classList.add("changeColor-green");
-    } else if (h2) {
-        light.classList.remove("changeColor-green");
-        light.classList.add("changeColor-red");
-    }  else {
-        light.classList.remove("changeColor-green");
-        light.classList.remove("changeColor-red");
-        light.classList.add("no-light");
-    }
+function turnLightOn() {
+    light.classList.remove("changeColor-red", "changeColor-green");
+    if (h1) light.classList.add("changeColor-green"); else if (h2) light.classList.add("changeColor-red");
 }
 
 function showErrorDialog(message) {
@@ -110,13 +90,14 @@ function showErrorDialog(message) {
     dialogError.showModal();
 }
 
-function incrementStopCount(location) {
-    if (positionTemp !== undefined && location !== positionTemp && mem_posizioa !== 0) {
-        stopCounts[location]++;
+const hasTrainMoved = () => mem_posizioa !== mem_posizioaTemp;
+
+function incrementStopCount() {
+    if (hasTrainMoved() && mem_posizioa !== 0) {
+        stopCounts[mem_posizioa]++;
         localStorage.setItem("stopCounts", JSON.stringify(stopCounts));
         updateStopCountDisplay();
     }
-    positionTemp = location;
 }
 
 function updateStopCountDisplay() {
@@ -127,63 +108,43 @@ function updateStopCountDisplay() {
     }
 }
 
-window.onload = function () {
+window.onload = () => {
     if (localStorage.getItem("stopCounts")) {
         stopCounts = JSON.parse(localStorage.getItem("stopCounts"));
         updateStopCountDisplay();
     }
 };
 
+buttonStart.addEventListener("click", () =>
+    checkBoxAutoMan.checked ? postData(["PM", true], ["SETA", false], ["REARME", false])
+        : postData(["PM", true], ["SETA", false], ["REARME", false], ["MEM_POSIZIOA", destinationList.selectedIndex]));
+buttonStop.addEventListener("click", () => postData(["SETA", true], ["PM", false]));
+buttonReset.addEventListener("click", () => postData(["REARME", true], ["MEM_POSIZIOA", 0]));
+buttonFinishCycle.addEventListener("click", () => postData(["PFC", true]));
+buttonFindOrigin.addEventListener("click", () => postData(["BUSQUEDA_0", true]));
+checkBoxAutoMan.addEventListener("change", () =>
+    checkBoxAutoMan.checked ? postData(["SELEK_AUTO/MAN", true], ["PM", false], ["MEM_POSIZIOA", 0])
+        : postData(["SELEK_AUTO/MAN", false], ["PM", false], ["MEM_POSIZIOA", 0]));
+document.querySelectorAll(".train-wrapper button").forEach((element, index) =>
+    element.addEventListener("click", () => destinationList.selectedIndex = index));
+document.querySelector(".dialog-error-accept").addEventListener("click", () => dialogError.close());
+
 setInterval(() => {
     getData().then(()=> {
-        turnLightOn(h1, h2);
+        turnLightOn();
         checkBoxAutoMan.checked = select_auto_man;
-        incrementStopCount(cycle[mem_posizioa]);
-        playNextAnimation(cycle[mem_posizioa]);
+        incrementStopCount();
+        playNextAnimation();
         if (seta) {
-            setButtonsState(false, true,false, true);
+            setButtonsState(false, true, false, true);
             if (rearme && mem_posizioa === 0) {
-                setButtonsState(true, true,true, true);
+                setButtonsState(true, true, true, true);
                 postData(["SETA", false], ["REARME", false]);
             }
         } else if (select_auto_man) {
-            setButtonsState(false, false,true, false);
+            setButtonsState(false, false, true, false);
             if (pfc && mem_posizioa === 1)
-                setTimeout(() => {
-                    postData(["PFC", false], ["PM", false], ["MEM_POSIZIOA", 0]);
-                    playNextAnimation(cycle[mem_posizioa]);
-                }, 1000)
-        } else setButtonsState(false, true,true, true);
-        if (mem_posizioa === 0 && busqueda0) postData(["BUSQUEDA_0", false]);
-    }).catch(error => {showErrorDialog("Fetch error: " + error)})
-}, 500);
-
-buttonStart.addEventListener("click", () => {
-    checkBoxAutoMan.checked ? postData(["PM", true], ["SETA", false], ["REARME", false])
-        : postData(["PM", true], ["SETA", false], ["REARME", false], ["MEM_POSIZIOA", destinationList.selectedIndex]);
-});
-
-buttonStop.addEventListener("click", () => {
-    postData(["SETA", true], ["PM", false]);
-});
-
-buttonReset.addEventListener("click", () => {
-    postData(["REARME", true], ["MEM_POSIZIOA", 0]);
-});
-
-buttonFinishCycle.addEventListener("click", () => {
-    postData(["PFC", true]);
-});
-
-checkBoxAutoMan.addEventListener("change", () => {
-    checkBoxAutoMan.checked ? postData(["SELEK_AUTO/MAN", true], ["PM", false], ["MEM_POSIZIOA", 0])
-        : postData(["SELEK_AUTO/MAN", false], ["PM", false], ["MEM_POSIZIOA", 0]);
-});
-
-document.querySelectorAll(".line button").forEach((element, index) => {
-    element.addEventListener("click", () => destinationList.selectedIndex = index);
-});
-
-document.querySelector(".dialog-error-accept").addEventListener("click", () => {
-   dialogError.close();
-});
+                postData(["PFC", false], ["PM", false], ["MEM_POSIZIOA", 0]);
+        } else setButtonsState(false, true, true, true);
+        mem_posizioaTemp = mem_posizioa;
+    }).catch(error => showErrorDialog("Fetch error: " + error))}, 1000);

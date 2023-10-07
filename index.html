@@ -11,7 +11,7 @@
 </head>
 <body>
 <header>
-    <p>EuskoTren</p>
+    <h1>EuskoTren</h1>
     <nav>
         <ul>
             <li><a href="index.html">Tranvía</a></li>
@@ -22,10 +22,8 @@
 
 <main>
     <div class="train-wrapper">
-        <div class="line">
-            <!-- <img src="media/tram.png" id="train" class="train"> -->
-        </div>
-        <div id="train"></div>
+        <div class="line"></div>
+        <div class="train train-animation-stopped"></div>
         <button id="parada0">P0</button>
         <button id="parada1">P1</button>
         <button id="parada2">P2</button>
@@ -79,6 +77,7 @@
         <li><a href="#">Telefono</a></li>
     </ul>
 </footer>
+
 <dialog class="dialog-error">
     <div class="dialog-error-container">
         <p class="message"></p>
