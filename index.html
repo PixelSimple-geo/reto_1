@@ -1,26 +1,13 @@
-<html>
-<head lang="es-ES">
-    <!-- AWP_In_Variable Name='"mis_datos".MEM_POSIZIOA' -->
-    <!-- AWP_In_Variable Name='"mis_datos".SETA' -->
-    <!-- AWP_In_Variable Name='"mis_datos".REARME' -->
-    <!-- AWP_In_Variable Name='"mis_datos".SELEK_AUTO/MAN' -->
-    <!-- AWP_In_Variable Name='"mis_datos".PM' -->
-    <!-- AWP_In_Variable Name='"mis_datos".PFC' -->
-    <!-- AWP_In_Variable Name='"mis_datos".BUSQUEDA_0' -->
-    <!-- AWP_In_Variable Name='"mis_datos".H1_VERDE' -->
-    <!-- AWP_In_Variable Name='"mis_datos".H2_ROJO' -->
+<html lang="es-ES">
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Tranvía</title>
+    <title>EuskoTren</title>
 
-    <!--CSS-->
     <link type="text/css" rel="stylesheet" href="css/reset.css">
     <link type="text/css" rel="stylesheet" href="css/style.css">
-
     <script type="text/javascript" src="js/main.js" defer></script>
-
 </head>
 <body>
 <header>
@@ -32,17 +19,19 @@
         </ul>
     </nav>
 </header>
+
 <main>
     <div class="train-wrapper">
         <div class="line">
-            <button id="parada0">P0</button>
-            <button id="parada1">P1</button>
-            <button id="parada2">P2</button>
-            <button id="parada3">P3</button>
-            <button id="parada4">P4</button>
-            <button id="parada5">P5</button>
-            <img src="media/tram.png" id="train" class="train">
+            <!-- <img src="media/tram.png" id="train" class="train"> -->
         </div>
+        <div id="train"></div>
+        <button id="parada0">P0</button>
+        <button id="parada1">P1</button>
+        <button id="parada2">P2</button>
+        <button id="parada3">P3</button>
+        <button id="parada4">P4</button>
+        <button id="parada5">P5</button>
     </div>
     <div class="controllers">
         <div class="puertas changeColor-animation"></div>
@@ -61,6 +50,7 @@
             <button type="button" id="stop">Parar</button>
             <button type="button" id="reset">Resetear</button>
         </div>
+
         <div class="destino-wrapper">
             <label for="destino">Destino: </label>
             <select id="destino">
@@ -72,9 +62,14 @@
                 <option>P5</option>
             </select>
         </div>
-        <button type="button" class="terminarCiclo">Terminar Ciclo</button>
+
+        <div class="rename-this-class">
+            <button type="button" class="terminarCiclo">Terminar Ciclo</button>
+            <button type="button" class="reencontrarse">Reencontrarse</button>
+        </div>
     </div>
 </main>
+
 <footer>
     <p>Copyright &copy; 2023 Grupo PixelSimple.geo & Automatización | Todos los derechos reservados </p>
     <ul>
@@ -84,15 +79,6 @@
         <li><a href="#">Telefono</a></li>
     </ul>
 </footer>
-<dialog class="dialog-busqueda">
-    <div class="dialog-container">
-        <p>Hacer búsqueda de origen</p>
-        <div>
-            <button type="button" id="accept">Aceptar</button>
-            <button type="button" id="cancel">Cancelar</button>
-        </div>
-    </div>
-</dialog>
 <dialog class="dialog-error">
     <div class="dialog-error-container">
         <p class="message"></p>
