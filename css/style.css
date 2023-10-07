@@ -35,8 +35,7 @@ header {
     padding: 1em;
     flex-wrap: wrap;
     background-color: var(--bgColor);
-    border-bottom: 1px solid var(--borderColor);
-    font-size: var(--step-1);
+    font-size: var(--step--1);
     font-weight: lighter;
 }
 
@@ -54,18 +53,20 @@ nav ul a {
 
 /*Main*/
 main {
+    /*
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 8rem;
+     */
 }
 
 .train-wrapper {
     position: relative;
     width: 80%;
     padding: 2rem;
-    margin: 0 auto;
+    margin: 5rem auto;
 }
 
 /*Tren*/
@@ -79,12 +80,34 @@ main {
 }
 
 #train {
+    font-size: var(--step--1);
+    width: 3em;
+    height: 3em;
+    border-radius: 100%;
+    background-color: green;
     position: absolute;
+    top: 50%;
     left: 0;
-    transform: translate(-50%, 5%);
-    width: 100px;
-    aspect-ratio: 1;
-    z-index: -1;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+
+}
+
+.train-animation {
+    animation-name: ball-animation;
+}
+
+@keyframes ball-animation {
+    10% {
+        width: 0.5em;
+        height: 0.5em;
+    }
+    90% {
+        width: 0.5em;
+        height: 0.5em;
+    }
 }
 
 /*Linea de paradas*/
@@ -97,14 +120,13 @@ main {
     height: 3em;
     background-color: black;
 }
-.line button {
+.train-wrapper button {
     display: flex;
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: -1000%;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
     width: 3em;
     height: 3em;
     background-size: 200%;
@@ -130,25 +152,27 @@ main {
     }
 }
 
-.line button:nth-child(1) {
-    left: 0;
+#parada0 {
+    left: 0%;
 }
-.line button:nth-child(2) {
+
+#parada1 {
     left: 20%;
 }
-.line button:nth-child(3) {
+
+#parada2 {
     left: 40%;
 }
 
-.line button:nth-child(4) {
+#parada3 {
     left: 60%;
 }
 
-.line button:nth-child(5) {
+#parada4 {
     left: 80%;
 }
 
-.line button:nth-child(6) {
+#parada5 {
     left: 100%;
 }
 
@@ -165,6 +189,7 @@ main {
     padding: 2em;
     border: 1px solid var(--borderColor);
     border-radius: 10px;
+    margin: 10rem auto;
 }
 
 .botones-container {
@@ -279,32 +304,44 @@ select{
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: red;
-    box-shadow: 0 0 10px 1px red;
 }
 
 .changeColor-animation {
+    /*
     animation-delay: 0s;
     animation-duration: 1s;
     animation-iteration-count: 1;
     animation-timing-function: linear;
-    animation-fill-mode: forwards;
+    animation-fill-mode: forwards;*/
+    transition: all 350ms linear;
+}
+
+.no-light {
+    /* animation-name: no-light; */
+    background-color: black;
+    box-shadow: unset;
 }
 
 .changeColor-green {
-    animation-name: lightOn;
+    /* animation-name: lightOn; */
+    background-color: green;
+    box-shadow: 0 0 10px 1px green;
 }
 
 .changeColor-red {
-    animation-name: lightOff;
+    /* animation-name: lightOff; */
+    background-color: red;
+    box-shadow: 0 0 10px 1px red;
+}
+
+@keyframes no-light {
+    100% {
+        background-color: black;
+        box-shadow: unset;
+    }
 }
 
 @keyframes lightOff {
-    0% {
-        background-color: green;
-        box-shadow: 0 0 10px 1px green;
-    }
-
      100% {
          background-color: red;
          box-shadow: 0 0 10px 1px red;
@@ -312,11 +349,6 @@ select{
  }
 
 @keyframes lightOn {
-    0% {
-        background-color: red;
-        box-shadow: 0 0 10px 1px red;
-    }
-
     100% {
         background-color: green;
         box-shadow: 0 0 10px 1px green;
@@ -328,6 +360,7 @@ footer{
     display: flex;
     justify-content: space-between;
     padding: 1em;
+    font-size: var(--step--2);
 }
 
 footer ul {
@@ -393,7 +426,6 @@ footer ul {
     header nav ul{
         flex-direction: row;
         justify-content:start;
-        font-size: var(--step-0);
     }
 
     .destino-wrapper{
@@ -401,9 +433,6 @@ footer ul {
     }
 
     /*Ventana manual y stats*/
-    .header2 p{
-        font-size: var(--step-1);
-    }
 
     .manGraph {
         grid-template-columns: auto;
@@ -423,7 +452,6 @@ footer ul {
 
     footer{
         flex-direction: column;
-        font-size: var(--step--2);
     }
 
     .manualDeUso p{
@@ -451,3 +479,10 @@ dialog .dialog-container div {
     grid-template-columns: 1fr 1fr;
 }
 
+.rename-this-class {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
