@@ -77,7 +77,7 @@ function playNextAnimation() {
     train.style.transition = "all 1000ms";
     train.style.left = cycle[mem_posizioa];
     train.classList.remove("train-animation-stopped", "train-animation-moving");
-    hasTrainMoved() ? train.classList.add("train-animation-moving") : train.classList.add("train-animation-stopped");
+    hasTrainMoved(mem_posizioa, mem_posizioaTemp) ? train.classList.add("train-animation-moving") : train.classList.add("train-animation-stopped");
 }
 
 function turnLightOn() {
@@ -90,10 +90,10 @@ function showErrorDialog(message) {
     dialogError.showModal();
 }
 
-const hasTrainMoved = () => mem_posizioa !== mem_posizioaTemp;
+const hasTrainMoved = (posicion, valorTemporal) => posicion !== valorTemporal;
 
 function incrementStopCount() {
-    if (hasTrainMoved() && mem_posizioa !== 0) {
+    if (hasTrainMoved(mem_posizioa, mem_posizioaTemp) && mem_posizioa !== 0) {
         stopCounts[cycle[mem_posizioa]]++;
         localStorage.setItem("stopCounts", JSON.stringify(stopCounts));
         updateStopCountDisplay();
@@ -150,3 +150,5 @@ setInterval(() => {
         } else setButtonsState(false, true, true, true);
         mem_posizioaTemp = mem_posizioa;
     }).catch(error => showErrorDialog("Fetch error: " + error))}, 1000);
+
+module.exports = hasTrainMoved;
