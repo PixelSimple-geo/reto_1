@@ -1,0 +1,15 @@
+{
+  "source": {
+    "include": ["./js/main.js"],
+    "exclude": ["./node_modules/"]
+  },
+  "opts": {
+    "destination": "./docs/",
+    "recurse": true
+  },
+  "templates": {
+    "cleandoc": {
+      "name": "Reto 1 documentacion"
+    }
+  }
+}

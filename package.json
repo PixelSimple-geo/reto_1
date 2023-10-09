@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "jest": "^29.7.0",
+    "jsdoc": "^4.0.2",
     "jsdom": "^22.1.0"
   },
   "scripts": {
