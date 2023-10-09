@@ -17,7 +17,7 @@ const cycle = ["0%", "20%", "40%", "60%", "80%", "100%", "80%", "60%", "40%", "2
 //PLC variables
 const URI = "html/IO_variables.html";
 let mem_posizioa, select_auto_man, pm, seta, rearme, pfc, busqueda0, h1, h2,
-mem_posizioaTemp = -Infinity; // Not a PLC variable. It's for state tracking purposes
+    mem_posizioaTemp = -Infinity; // Not a PLC variable. It's for state tracking purposes
 
 // Statistics variables
 let stopCounts = {"20%": 0, "40%": 0, "60%": 0, "80%": 0, "100%": 0};
@@ -74,7 +74,7 @@ function setButtonsState(buttonStartState, buttonStopState, buttonResetState, bu
 }
 
 function playNextAnimation() {
-    train.style.transition = "all 1000ms";
+    train.style.transition = "all 1000ms ease-in-out";
     train.style.left = cycle[mem_posizioa];
     train.classList.remove("train-animation-stopped", "train-animation-moving");
     hasTrainMoved() ? train.classList.add("train-animation-moving") : train.classList.add("train-animation-stopped");
@@ -94,7 +94,7 @@ const hasTrainMoved = () => mem_posizioa !== mem_posizioaTemp;
 
 function incrementStopCount() {
     if (hasTrainMoved() && mem_posizioa !== 0) {
-        stopCounts[mem_posizioa]++;
+        stopCounts[cycle[mem_posizioa]]++;
         localStorage.setItem("stopCounts", JSON.stringify(stopCounts));
         updateStopCountDisplay();
     }
@@ -122,9 +122,11 @@ buttonStop.addEventListener("click", () => postData(["SETA", true], ["PM", false
 buttonReset.addEventListener("click", () => postData(["REARME", true], ["MEM_POSIZIOA", 0]));
 buttonFinishCycle.addEventListener("click", () => postData(["PFC", true]));
 buttonFindOrigin.addEventListener("click", () => postData(["BUSQUEDA_0", true]));
-checkBoxAutoMan.addEventListener("change", () =>
+checkBoxAutoMan.addEventListener("change", () => {
+    checkBoxAutoMan.disabled = true;
     checkBoxAutoMan.checked ? postData(["SELEK_AUTO/MAN", true], ["PM", false], ["MEM_POSIZIOA", 0])
-        : postData(["SELEK_AUTO/MAN", false], ["PM", false], ["MEM_POSIZIOA", 0]));
+        : postData(["SELEK_AUTO/MAN", false], ["PM", false], ["MEM_POSIZIOA", 0])
+});
 document.querySelectorAll(".train-wrapper button").forEach((element, index) =>
     element.addEventListener("click", () => destinationList.selectedIndex = index));
 document.querySelector(".dialog-error-accept").addEventListener("click", () => dialogError.close());
@@ -132,7 +134,7 @@ document.querySelector(".dialog-error-accept").addEventListener("click", () => d
 setInterval(() => {
     getData().then(()=> {
         turnLightOn();
-        checkBoxAutoMan.checked = select_auto_man;
+        setTimeout(() => {checkBoxAutoMan.checked = select_auto_man; checkBoxAutoMan.disabled = false}, 500);
         incrementStopCount();
         playNextAnimation();
         if (seta) {
