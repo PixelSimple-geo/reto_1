@@ -12,9 +12,6 @@
     --bgColor: white;
     --bg-accent: rgba(211, 211, 211, 0.9);
     --borderColor: #d2d3d7;
-
-    --train-start: 0%;
-    --train-end: 100%;
 }
 
 html {
@@ -30,14 +27,11 @@ body {
 /* Cabecera */
 header {
     display: flex;
-    justify-content: space-between;
-    width: 80%;
-    margin: 0 auto;
-    padding: 1em;
+    justify-content: space-around;
     flex-wrap: wrap;
-    background-color: var(--bgColor);
+    width: 100%;
+    padding: 1em;
     font-size: var(--step-1);
-    font-weight: lighter;
 }
 
 nav {
@@ -49,13 +43,9 @@ nav {
 nav ul {
     display: flex;
     flex-wrap: wrap;
+    gap: 2rem;
     justify-content: center;
     align-items: center;
-    width: 100%;
-}
-
-nav ul a {
-    padding: 1em;
 }
 
 /*Main*/
@@ -64,7 +54,7 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8rem;
+    gap: 5rem;
 }
 
 .train-wrapper {
@@ -92,8 +82,9 @@ main {
     border-radius: 100%;
     position: absolute;
     left: 0;
-    transform: translate(-50%, -50%);
     z-index: 9999;
+    transition: all 1000ms ease-in-out;
+    transform: translate(-50%, -50%);
 }
 
 .train-animation-moving {
@@ -102,6 +93,7 @@ main {
     animation-name: train-animation-moving;
 }
 
+/* We need this class for javascript */
 .train-animation-stopped {}
 
 .train-animation-stopped::before {
@@ -139,38 +131,29 @@ main {
     }
 }
 
-
-
-/*Linea de paradas*/
-.line > div {
-    position: absolute;
-    top: -3em;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0.2em;
-    height: 3em;
-    background-color: black;
-}
 .train-wrapper button {
+    --size: 5rem;
     display: flex;
     justify-content: center;
     align-items: center;
     position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 5rem;
-    height: 5rem;
+    width: var(--size);
+    height: var(--size);
     background-size: 200%;
     background-image: linear-gradient(to left, #ffc312, #EE5A24, #FFC312);
-    border-radius: 50%;
+    border-radius: 100%;
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
 }
+
 .train-wrapper button:hover{
     background-position: right;
     animation: buttonAnimation 1s infinite alternate ease;
 }
+
 @keyframes buttonAnimation {
     0% {
         transform: translate(-50%, -50%) scale(1);
@@ -184,6 +167,7 @@ main {
 #parada0 {
     left: 0;
 }
+
 #parada1 {
     left: 20%;
 }
@@ -212,7 +196,7 @@ main {
     align-items: center;
     position: relative;
     overflow: hidden;
-    width: min(35rem, 80%);
+    width: min(30rem, 80%);
     gap: 1rem;
     padding: 2em;
     border: 1px solid var(--borderColor);
@@ -235,6 +219,7 @@ main {
     cursor: pointer;
     transition: 0.5s;
 }
+
 .controllers button:not(button:disabled):hover{
     background-color: black;
     color: white;
@@ -242,14 +227,6 @@ main {
 
 .controllers button[disabled] {
     background-color: var(--bg-accent);
-}
-
-.destino-wrapper {
-    height: 100%;
-}
-
-.terminarCiclo {
-    height: 100%;
 }
 
 #destino {
@@ -325,12 +302,13 @@ select{
 
 /*Puertas*/
 .puertas {
+    --size: 20px;
     position: absolute;
     top: 10px;
     left: 10px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 100%;
     background-color: black;
     transition: all 250ms;
 }
@@ -345,11 +323,12 @@ select{
     box-shadow: 0 0 10px 1px red;
 }
 
-
 /*Footer*/
-footer{
+footer {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
     padding: 1em;
     font-size: var(--step--2);
 }
@@ -361,7 +340,7 @@ footer ul {
 }
 
 /*Manual y Stats*/
-.manGraph{
+.manGraph {
     display: grid;
     grid-template-columns: auto auto;
 }
@@ -403,25 +382,10 @@ footer ul {
 
 /*Responsive*/
 @media screen and (max-width: 1300px) {
-    * {
-        box-sizing: border-box;
-    }
     /*Ventana Control*/
     header{
         flex-direction: column;
         align-items: center;
-        width: 100%;
-        padding: 0.5em;
-    }
-
-    header nav ul{
-        flex-direction: row;
-        justify-content:start;
-        font-size: var(--step-0);
-    }
-
-    .destino-wrapper{
-        height: 25%;
     }
 
     .manGraph {

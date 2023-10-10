@@ -104,7 +104,6 @@ function setButtonsState(buttonStartState, buttonStopState, buttonResetState, bu
  * Reproduce la siguiente animación del tren.
  */
 function playNextAnimation() {
-    train.style.transition = "all 1000ms ease-in-out";
     train.style.left = cycle[mem_posizioa];
     train.classList.remove("train-animation-stopped", "train-animation-moving");
     hasTrainMoved(mem_posizioa, mem_posizioaTemp) ? train.classList.add("train-animation-moving") : train.classList.add("train-animation-stopped");
@@ -284,10 +283,3 @@ setInterval(() => {
         showErrorDialog("Fetch error: " + error);
     });
 }, 1000);
-
-/**
- * Exporta la función hasTrainMoved.
- * @function
- * @returns {boolean} - Devuelve true si ha habido movimiento del tren, false en caso contrario.
- */
-module.exports = hasTrainMoved;
