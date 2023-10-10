@@ -233,6 +233,14 @@ main {
     padding: 0.5em;
 }
 
+.rename-this-class {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
 /*Boton de manual/automatico*/
 .manaut{
     display: inline;
