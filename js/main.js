@@ -165,12 +165,8 @@ window.onload = () => {
  * @function
  */
 buttonStart.addEventListener("click", () => {
-    // Maneja el clic en el botón de inicio
-    if (checkBoxAutoMan.checked) {
-        postData(["PM", true], ["SETA", false], ["REARME", false]);
-    } else {
-        postData(["PM", true], ["SETA", false], ["REARME", false], ["MEM_POSIZIOA", destinationList.selectedIndex]);
-    }
+    if (checkBoxAutoMan.checked) postData(["PM", true], ["SETA", false], ["REARME", false]);
+    else postData(["PM", true], ["SETA", false], ["REARME", false], ["MEM_POSIZIOA", destinationList.selectedIndex]);
 });
 
 /**
@@ -178,7 +174,6 @@ buttonStart.addEventListener("click", () => {
  * @function
  */
 buttonStop.addEventListener("click", () => {
-    // Maneja el clic en el botón de parada
     postData(["SETA", true], ["PM", false]);
 });
 
@@ -187,7 +182,6 @@ buttonStop.addEventListener("click", () => {
  * @function
  */
 buttonReset.addEventListener("click", () => {
-    // Maneja el clic en el botón de reinicio
     postData(["REARME", true], ["MEM_POSIZIOA", 0]);
 });
 
@@ -196,7 +190,6 @@ buttonReset.addEventListener("click", () => {
  * @function
  */
 buttonFinishCycle.addEventListener("click", () => {
-    // Maneja el clic en el botón de finalización de ciclo
     postData(["PFC", true]);
 });
 
@@ -205,7 +198,6 @@ buttonFinishCycle.addEventListener("click", () => {
  * @function
  */
 buttonFindOrigin.addEventListener("click", () => {
-    // Maneja el clic en el botón de búsqueda de origen
     postData(["BUSQUEDA_0", true]);
 });
 
@@ -214,13 +206,9 @@ buttonFindOrigin.addEventListener("click", () => {
  * @function
  */
 checkBoxAutoMan.addEventListener("change", () => {
-    // Maneja el cambio en la casilla de verificación Auto/Manual
     checkBoxAutoMan.disabled = true;
-    if (checkBoxAutoMan.checked) {
-        postData(["SELEK_AUTO/MAN", true], ["PM", false], ["MEM_POSIZIOA", 0]);
-    } else {
-        postData(["SELEK_AUTO/MAN", false], ["PM", false], ["MEM_POSIZIOA", 0]);
-    }
+    if (checkBoxAutoMan.checked) postData(["SELEK_AUTO/MAN", true], ["PM", false], ["MEM_POSIZIOA", 0]);
+    else postData(["SELEK_AUTO/MAN", false], ["PM", false], ["MEM_POSIZIOA", 0]);
 });
 
 /**
@@ -230,10 +218,7 @@ checkBoxAutoMan.addEventListener("change", () => {
  * @param {number} index - El índice del elemento clicado.
  */
 document.querySelectorAll(".train-wrapper button").forEach((element, index) => {
-    element.addEventListener("click", () => {
-        // Maneja el clic en los botones dentro de .train-wrapper
-        destinationList.selectedIndex = index;
-    });
+    element.addEventListener("click", () => destinationList.selectedIndex = index);
 });
 
 /**
@@ -241,7 +226,6 @@ document.querySelectorAll(".train-wrapper button").forEach((element, index) => {
  * @function
  */
 document.querySelector(".dialog-error-accept").addEventListener("click", () => {
-    // Maneja el clic en el botón de aceptar en el cuadro de diálogo de error
     dialogError.close();
 });
 
