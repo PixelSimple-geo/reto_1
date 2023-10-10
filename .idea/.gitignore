@@ -6,4 +6,6 @@
 /modules.xml
 /vcs.xml
 /reto_1.iml
+/.idea
+
 ../node_modules/*

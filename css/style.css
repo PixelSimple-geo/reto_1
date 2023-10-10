@@ -116,7 +116,7 @@ main {
     transform: translate(-50%, -50%);
     animation-duration: 2.5s;
     animation-iteration-count: infinite;
-    animation-timing-function: linear;
+    animation-timing-function: ease-in-out;
     animation-name: train-animation-stopped;
 }
 
