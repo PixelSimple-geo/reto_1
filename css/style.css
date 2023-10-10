@@ -351,6 +351,7 @@ footer ul {
 .manGraph {
     display: grid;
     grid-template-columns: auto auto;
+    padding: 1em;
 }
 
 .manualDeUso {
