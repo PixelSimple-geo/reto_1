@@ -98,9 +98,14 @@ function setButtonsState(buttonStartState, buttonStopState, buttonResetState, bu
  * Reproduce la siguiente animación del tren.
  */
 function playNextAnimation() {
-    train.style.left = cycle[mem_posizioa];
-    train.classList.remove("train-animation-stopped", "train-animation-moving");
-    hasTrainMoved(mem_posizioa, mem_posizioaTemp) ? train.classList.add("train-animation-moving") : train.classList.add("train-animation-stopped");
+    if (hasTrainMoved(mem_posizioa, mem_posizioaTemp)) {
+        train.style.left = cycle[mem_posizioa];
+        train.classList.remove("train-animation-stopped");
+        train.classList.add("train-animation-moving")
+    } else if (!hasTrainMoved(mem_posizioa, mem_posizioaTemp)) {
+        train.classList.remove("train-animation-moving");
+        train.classList.add("train-animation-stopped")
+    }
 }
 
 /**
