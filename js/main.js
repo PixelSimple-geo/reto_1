@@ -1,5 +1,4 @@
 "use strict";
-
 /* Variables para elementos HTML */
 const buttonStart = document.querySelector("#start");
 const buttonStop = document.querySelector("#stop");
@@ -61,17 +60,12 @@ const returnValueAsBoolean = (value) => parseInt(value) === 1;
  * @param {...Array} parameters - Los parámetros para enviar al servidor.
  */
 function postData(...parameters) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", URI, true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE)
-            if (xhr.status > 300) showErrorDialog(`Error al intentar actualizar: ${parameters.toString()}`);
-    };
-    const data = new URLSearchParams();
-    for(let i = 0; i < parameters.length; i++)
-        data.append('"mis_datos".' + parameters[i][0].toUpperCase(), parameters[i][1]);
-    xhr.send(data);
+    fetch(URI, {
+        method: 'POST',
+        body: parameters.map(element => `"mis_datos".${element[0].toUpperCase()}=${element[1]}`).join("\n")
+    }).then(response => {
+        if (!response.ok) showErrorDialog(`Error al intentar actualizar: ${parameters.toString()}`);
+    }).catch(error => showErrorDialog('Error en el fetch: ' + error));
 }
 
 /**
