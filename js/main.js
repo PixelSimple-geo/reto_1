@@ -210,7 +210,8 @@ buttonFindOrigin.addEventListener("click", () => {
  * Maneja el cambio en la casilla de verificación Auto/Manual.
  * @function
  */
-checkBoxAutoMan.addEventListener("change", () => {
+checkBoxAutoMan.addEventListener("click", (event) => {
+    event.preventDefault();
     checkBoxAutoMan.disabled = true;
     if (checkBoxAutoMan.checked) postData(["SELEK_AUTO/MAN", true], ["PM", false], ["MEM_POSIZIOA", 0]);
     else postData(["SELEK_AUTO/MAN", false], ["PM", false], ["MEM_POSIZIOA", 0]);
@@ -241,10 +242,8 @@ document.querySelector(".dialog-error-accept").addEventListener("click", () => {
 setInterval(() => {
     getData().then(() => {
         turnLightOn();
-        setTimeout(() => {
-            checkBoxAutoMan.checked = select_auto_man;
-            checkBoxAutoMan.disabled = false;
-        }, 500);
+        checkBoxAutoMan.checked = select_auto_man;
+        checkBoxAutoMan.disabled = false;
         incrementStopCount();
         playNextAnimation();
         if (seta) {
