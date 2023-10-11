@@ -20,7 +20,7 @@ let mem_posizioa, select_auto_man, pm, seta, rearme, pfc, busqueda0, h1, h2,
     mem_posizioaTemp = -Infinity; // No es una variable PLC, se utiliza para el seguimiento de estado
 
 /* Variables para estadísticas */
-let stopCounts = {"20%": 0, "40%": 0, "60%": 0, "80%": 0, "100%": 0};
+let stopCounts = { "20%": 0, "40%": 0, "60%": 0, "80%": 0, "100%": 0 };
 
 /**
  * Obtiene datos del servidor.
@@ -101,10 +101,10 @@ function playNextAnimation() {
     if (hasTrainMoved(mem_posizioa, mem_posizioaTemp)) {
         train.style.left = cycle[mem_posizioa];
         train.classList.remove("train-animation-stopped");
-        train.classList.add("train-animation-moving")
+        train.classList.add("train-animation-moving");
     } else if (!hasTrainMoved(mem_posizioa, mem_posizioaTemp)) {
         train.classList.remove("train-animation-moving");
-        train.classList.add("train-animation-stopped")
+        train.classList.add("train-animation-stopped");
     }
 }
 
@@ -212,7 +212,6 @@ buttonFindOrigin.addEventListener("click", () => {
  */
 checkBoxAutoMan.addEventListener("click", (event) => {
     event.preventDefault();
-    checkBoxAutoMan.disabled = true;
     if (checkBoxAutoMan.checked) postData(["SELEK_AUTO/MAN", true], ["PM", false], ["MEM_POSIZIOA", 0]);
     else postData(["SELEK_AUTO/MAN", false], ["PM", false], ["MEM_POSIZIOA", 0]);
 });
@@ -243,7 +242,6 @@ setInterval(() => {
     getData().then(() => {
         turnLightOn();
         checkBoxAutoMan.checked = select_auto_man;
-        checkBoxAutoMan.disabled = false;
         incrementStopCount();
         playNextAnimation();
         if (seta) {
@@ -261,7 +259,5 @@ setInterval(() => {
             setButtonsState(false, true, true, true);
         }
         mem_posizioaTemp = mem_posizioa;
-    }).catch(error => {
-        showErrorDialog("Fetch error: " + error);
-    });
+    }).catch(error => showErrorDialog("Fetch error: " + error));
 }, 1000);
