@@ -252,12 +252,8 @@ setInterval(() => {
             }
         } else if (select_auto_man) {
             setButtonsState(false, false, true, false);
-            if (pfc && mem_posizioa === 1) {
-                postData(["PFC", false], ["PM", false], ["MEM_POSIZIOA", 0]);
-            }
-        } else {
-            setButtonsState(false, true, true, true);
-        }
+            if (pfc && mem_posizioa === 1) postData(["PFC", false], ["PM", false], ["MEM_POSIZIOA", 0]);
+        } else setButtonsState(false, true, true, true);
         mem_posizioaTemp = mem_posizioa;
     }).catch(error => showErrorDialog("Fetch error: " + error));
 }, 1000);
